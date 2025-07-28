@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 export function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="mt-10 flex flex-col items-center justify-center gap-4 border-t py-4 md:flex-row">
+    <footer className="mt-10 flex flex-col items-center justify-center gap-4 border-t py-4 md:flex-row md:justify-between">
       <p className="text-muted-foreground text-sm">
         © {currentYear} Abdalrahman Mahmoud
       </p>

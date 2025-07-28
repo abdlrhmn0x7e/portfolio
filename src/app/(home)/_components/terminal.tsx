@@ -71,7 +71,7 @@ export function Terminal() {
       if (e.key === "Enter" && e.currentTarget.innerText) {
         const command = e.currentTarget.innerText;
 
-        setSubmittedCommand(command as Command);
+        setSubmittedCommand(command.trimEnd() as Command);
 
         if (command === "clear") {
           setSubmittedCommand(undefined);
@@ -107,8 +107,11 @@ export function Terminal() {
 
         <div className="group relative w-full pr-12">
           <div
-            className="text-chart-4 w-full font-semibold caret-transparent outline-none"
+            className="peer text-chart-4 w-full font-semibold caret-transparent outline-none"
             spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
+            autoSave="off"
             contentEditable
             onKeyDown={handleCommandSubmit}
             ref={ref}
@@ -116,7 +119,7 @@ export function Terminal() {
 
           <Caret
             variant={caretVariant}
-            className="absolute top-0 mr-12 mix-blend-difference duration-75"
+            className="absolute top-0 mr-12 mix-blend-difference duration-75 not-peer-focus:bg-transparent not-peer-focus:opacity-0"
             style={{
               transform: `translateX(${position.x}px) translateY(${position.y}px)`,
             }}

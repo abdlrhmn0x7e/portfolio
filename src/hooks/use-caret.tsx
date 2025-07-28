@@ -81,6 +81,7 @@ export function useCaret() {
         case "deleteWordBackward":
         case "deleteWordForward":
         case "deleteWord":
+        case "insertText":
         case "insertFromPaste":
         case "insertFromDrop":
         case "insertFromYank":

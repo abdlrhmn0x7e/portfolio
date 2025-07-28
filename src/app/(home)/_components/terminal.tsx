@@ -87,7 +87,10 @@ export function Terminal() {
   );
 
   return (
-    <div className="bg-card min-h-[calc(100svh-28rem)] w-full space-y-2 overflow-y-auto rounded-lg border pb-8">
+    <div
+      className="bg-card min-h-[calc(100svh-28rem)] w-full space-y-2 overflow-y-auto rounded-lg border pb-8"
+      onClick={() => ref.current?.focus()}
+    >
       <MemoizedTerminalHeader
         caretVariant={caretVariant}
         setCaretVariant={setCaretVariant}

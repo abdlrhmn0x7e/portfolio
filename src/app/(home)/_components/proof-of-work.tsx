@@ -33,7 +33,7 @@ const projects: Project[] = [
 		`,
     image: "/images/projects/sputnik.png",
     links: {
-      github: "https://github.com/abdalrahmanf2/sputnik",
+      github: "https://github.com/abdlrhmn0x7e/sputnik",
     },
   },
   {
@@ -44,7 +44,7 @@ const projects: Project[] = [
 		stripe payment integration, product management, and a responsive design.`,
     image: "/images/projects/casecobra.webp",
     links: {
-      github: "https://github.com/abdalrahmanf2/casecobra",
+      github: "https://github.com/abdlrhmn0x7e/casecobra",
       preview: "https://casecobra-lake-iota.vercel.app",
     },
   },
@@ -53,7 +53,7 @@ const projects: Project[] = [
     description: `A modern SAAS landing page for real time discord notifications, built with Next.js, Tailwind, and PostgreSQL.`,
     image: "/images/projects/pingpanda.webp",
     links: {
-      github: "https://github.com/abdalrahmanf2/pingpanda",
+      github: "https://github.com/abdlrhmn0x7e/pingpanda",
       preview: "https://ping-panda-beta-one.vercel.app",
     },
   },

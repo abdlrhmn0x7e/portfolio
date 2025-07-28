@@ -29,7 +29,7 @@ export function About() {
           <div className="flex flex-row gap-3 md:flex-col">
             <Button variant="outline" size="sm" asChild>
               <a
-                href="https://github.com/abdalrahmanf2"
+                href="https://github.com/abdlrhmn0x7e"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -51,12 +51,12 @@ export function About() {
 
             <Button variant="outline" size="sm" asChild>
               <a
-                href="https://x.com/abdalrahmanf2"
+                href="https://x.com/abdlrhmn0x7e"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <IconBrandX />
-                <span className="hidden md:block">abdlrhmn0x78</span>
+                <span className="hidden md:block">abdlrhmn0x7e</span>
               </a>
             </Button>
 

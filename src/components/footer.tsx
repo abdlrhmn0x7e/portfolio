@@ -13,16 +13,34 @@ export function Footer() {
         © {currentYear} Abdalrahman Mahmoud
       </p>
       <div className="flex items-center gap-2">
-        <Button variant="link">
-          <IconBrandGithub />
-          GitHub
+        <Button variant="link" asChild>
+          <a
+            href="https://github.com/abdlrhmn0x7e"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IconBrandGithub />
+            GitHub
+          </a>
         </Button>
-        <Button variant="link">
-          <IconBrandX />X
+        <Button variant="link" asChild>
+          <a
+            href="https://x.com/abdlrhmn0x7e"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IconBrandX />X
+          </a>
         </Button>
-        <Button variant="link">
-          <IconBrandLinkedin />
-          LinkedIn
+        <Button variant="link" asChild>
+          <a
+            href="https://www.linkedin.com/in/abdalrahmanf2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IconBrandLinkedin />
+            LinkedIn
+          </a>
         </Button>
       </div>
     </footer>

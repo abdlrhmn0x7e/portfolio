@@ -8,9 +8,15 @@ import { MaxWidthWrapper } from "~/components/max-width-wrapper";
 import { Footer } from "~/components/footer";
 
 export const metadata: Metadata = {
-  title: "abdlrhmn",
-  description:
-    "full stack dev. neovim daily driver. arch btw. building things that don’t break (often).",
+  title: "abdlrhmn0x7e | Full-Stack Web Developer",
+  description: `I'm a full-stack web developer specializing in Next.js and the modern
+              JavaScript/TypeScript ecosystem. I build fast, scalable, and maintainable
+              applications—end to end. With hands-on experience across a wide range of tools
+              and frameworks (Next.js, React, Tailwind, Node.js, Bun, Hono, Drizzle, Postgres, and more),
+              I move quickly without breaking things (too often). I'm a fast learner, deeply curious,
+              and comfortable diving into unfamiliar stacks to solve real-world problems.
+              oh and I use Arch btw.
+            `,
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

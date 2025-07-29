@@ -1,6 +1,6 @@
 "use client";
 
-import type { Command, Directory } from "~/lib/types";
+import type { Directory } from "~/lib/types";
 import {
   createContext,
   useContext,

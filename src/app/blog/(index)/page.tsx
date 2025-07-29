@@ -1,14 +1,7 @@
-import { Calendar, Eye } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { format } from "date-fns";
 import { BlogsEmptyState } from "~/components/blogs-empty-state";
-import { Badge } from "~/components/ui/badge";
-import { getBlogsMetadata, type Blog } from "./utils";
+import { BlogCard } from "~/components/blog-card";
+import { getBlogsMetadata } from "./utils";
 import { H1 } from "~/components/ui/h1";
-import { Button } from "~/components/ui/button";
-import type { ComponentProps } from "react";
-import { cn } from "~/lib/utils";
 
 export default async function BlogPage() {
   const blogs = await getBlogsMetadata();
@@ -33,52 +26,5 @@ export default async function BlogPage() {
         )}
       </div>
     </div>
-  );
-}
-
-function BlogCard({
-  title,
-  description,
-  date,
-  slug,
-  thumbnail,
-  className,
-  ...props
-}: Blog & ComponentProps<"div">) {
-  return (
-    <Link href={`/blog/${slug}`}>
-      <div
-        className={cn(
-          "bg-card grid grid-cols-1 gap-6 border p-3 md:grid-cols-2",
-          className,
-        )}
-        {...props}
-      >
-        <Image src={thumbnail} alt={title} width={512} height={512} />
-        <div className="flex flex-col gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-lg md:text-xl">{title}</h3>
-
-              <Badge>
-                <Calendar /> {format(new Date(date), "MMM d, yyyy")}
-              </Badge>
-            </div>
-            <p className="text-muted-foreground">{description}</p>
-          </div>
-
-          <div className="flex flex-1 items-end justify-end">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="pointer-events-none"
-            >
-              <Eye />
-              Read More
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Link>
   );
 }

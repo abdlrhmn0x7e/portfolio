@@ -281,10 +281,13 @@ function CommandOutput({ command }: { command: Command }) {
         }
 
         return (
-          <p className="flex items-center gap-2">
-            <XCircle className="h-4 w-4" />
-            Command not found, did you mean{" "}
-            <code className="bg-accent px-1 py-0.5">{closestCommand}</code>?
+          <p className="flex items-start gap-3">
+            <XCircle className="mt-1 h-4 w-4" />
+
+            <span>
+              Command not found, did you mean{" "}
+              <code className="bg-accent px-1 py-0.5">{closestCommand}</code>?
+            </span>
           </p>
         );
       }

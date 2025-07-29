@@ -10,8 +10,12 @@ import {
   IconBrandX,
   IconCertificate,
 } from "@tabler/icons-react";
+import { getBlogsMetadata } from "~/app/blog/(index)/utils";
+import { TerminalContextProvider } from "./terminal/terminal-context";
 
-export function About() {
+export async function About() {
+  const blogs = await getBlogsMetadata();
+
   return (
     <section className="items-center justify-center space-y-12">
       <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
@@ -119,7 +123,9 @@ export function About() {
         </div>
       </div>
 
-      <Terminal />
+      <TerminalContextProvider>
+        <Terminal blogs={blogs} />
+      </TerminalContextProvider>
     </section>
   );
 }

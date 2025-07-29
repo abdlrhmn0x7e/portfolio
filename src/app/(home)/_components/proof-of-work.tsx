@@ -10,54 +10,9 @@ import type { ComponentProps } from "react";
 import { AspectRatio } from "~/components/ui/aspect-ratio";
 import { Button } from "~/components/ui/button";
 import { H1 } from "~/components/ui/h1";
+import { PROJECTS } from "~/lib/constants";
+import type { Project } from "~/lib/types";
 import { cn } from "~/lib/utils";
-
-const projects: Project[] = [
-  {
-    title: "Shafei",
-    description: `A comprehensive full-stack vehicle management application 
-									designed to streamline car registration, service tracking, 
-									and administrative operations. Built with modern technologies 
-									in a scalable monorepo architecture.`,
-    image: "/images/projects/shafei.png",
-    links: {
-      preview: "https://shafei-web.vercel.app",
-    },
-  },
-  {
-    title: "Sputnik",
-    description: `A comprehensive online learning platform for course management 
-		and student progress tracking built with React, TypeScript, Hono, Prisma, and PostgreSQL.
-		 Architected and developed the complete full-stack learning management system featuring 
-		 video streaming, quizzes, progress tracking, and payment integration.
-		`,
-    image: "/images/projects/sputnik.png",
-    links: {
-      github: "https://github.com/abdlrhmn0x7e/sputnik",
-    },
-  },
-  {
-    title: "Casecobra",
-    description: `A modern e-commerce platform for custom phone cases, 
-		built with cutting-edge web technologies. Create, customize, and 
-		buy phone cases. built with Next.js, Tailwind, and PostgreSQL. featuring
-		stripe payment integration, product management, and a responsive design.`,
-    image: "/images/projects/casecobra.webp",
-    links: {
-      github: "https://github.com/abdlrhmn0x7e/casecobra",
-      preview: "https://casecobra-lake-iota.vercel.app",
-    },
-  },
-  {
-    title: "PingPanda",
-    description: `A modern SAAS landing page for real time discord notifications, built with Next.js, Tailwind, and PostgreSQL.`,
-    image: "/images/projects/pingpanda.webp",
-    links: {
-      github: "https://github.com/abdlrhmn0x7e/pingpanda",
-      preview: "https://ping-panda-beta-one.vercel.app",
-    },
-  },
-];
 
 export function ProofOfWork() {
   return (
@@ -70,9 +25,9 @@ export function ProofOfWork() {
       </div>
 
       <div className="relative flex flex-col gap-4">
-        {projects.map((project, index) => (
+        {PROJECTS.map((project, index) => (
           <ProjectCard
-            key={project.title}
+            key={project.title + index}
             {...project}
             className="sticky"
             style={{ top: `${index * 40 + 100}px` }}
@@ -81,16 +36,6 @@ export function ProofOfWork() {
       </div>
     </section>
   );
-}
-
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-  links: {
-    github?: string;
-    preview?: string;
-  };
 }
 
 function ProjectCard({

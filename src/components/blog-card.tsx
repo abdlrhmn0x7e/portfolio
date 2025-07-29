@@ -7,6 +7,7 @@ import { Calendar, Eye } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
+import { AspectRatio } from "./ui/aspect-ratio";
 
 export function BlogCard({
   title,
@@ -26,7 +27,9 @@ export function BlogCard({
         )}
         {...props}
       >
-        <Image src={thumbnail} alt={title} width={512} height={512} />
+        <AspectRatio ratio={16 / 9}>
+          <Image src={thumbnail} alt={title} fill className="object-cover" />
+        </AspectRatio>
         <div className="flex flex-col gap-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-2">

@@ -2,7 +2,7 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "~/components/theme-provider";
+import { ThemeProvider } from "~/components/providers/theme-provider";
 import { Header } from "~/components/header";
 import { MaxWidthWrapper } from "~/components/max-width-wrapper";
 import { Footer } from "~/components/footer";

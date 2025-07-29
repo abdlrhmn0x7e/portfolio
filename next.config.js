@@ -4,7 +4,29 @@
  */
 import "./src/env.js";
 
-/** @type {import("next").NextConfig} */
-const config = {};
+import createMDX from "@next/mdx";
+import rehypePrettyCode from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
+import rehypeSlug from "rehype-slug";
 
-export default config;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+};
+
+/** @type {import('rehype-pretty-code').Options} */
+const rehypePrettyCodeOptions = {
+  theme: "kanagawa-wave",
+};
+
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: [remarkGfm, remarkToc],
+    rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug],
+  },
+});
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig);

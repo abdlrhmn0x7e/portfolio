@@ -13,7 +13,7 @@ import {
 
 export function About() {
   return (
-    <section className="items-center justify-center space-y-12 pt-16">
+    <section className="items-center justify-center space-y-12">
       <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
         <div className="flex flex-col items-center gap-3 md:items-start">
           <div className="h-full shrink-0 overflow-hidden border-2 md:w-full">

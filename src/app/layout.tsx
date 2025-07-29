@@ -39,7 +39,7 @@ export default function RootLayout({
         >
           <MaxWidthWrapper className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="mt-12 flex-1">{children}</main>
             <Footer />
           </MaxWidthWrapper>
         </ThemeProvider>

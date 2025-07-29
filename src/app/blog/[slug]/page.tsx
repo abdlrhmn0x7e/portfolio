@@ -1,3 +1,5 @@
+import { getBlogsMetadata } from "../(index)/utils";
+
 export default async function BlogPage({
   params,
 }: {
@@ -15,8 +17,9 @@ export default async function BlogPage({
   );
 }
 
-export function generateStaticParams() {
-  return [{ slug: "hello" }];
+export async function generateStaticParams() {
+  const blogs = await getBlogsMetadata();
+  return blogs.map((blog) => ({ slug: blog.slug }));
 }
 
 export const dynamicParams = false;

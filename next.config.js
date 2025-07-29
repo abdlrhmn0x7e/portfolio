@@ -9,6 +9,8 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -23,7 +25,12 @@ const rehypePrettyCodeOptions = {
 const withMDX = createMDX({
   extension: /\.(md|mdx)$/,
   options: {
-    remarkPlugins: [remarkGfm, remarkToc],
+    remarkPlugins: [
+      remarkGfm,
+      remarkToc,
+      remarkFrontmatter,
+      remarkMdxFrontmatter,
+    ],
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug],
   },
 });

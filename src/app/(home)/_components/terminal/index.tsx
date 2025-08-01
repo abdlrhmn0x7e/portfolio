@@ -70,6 +70,18 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
         e.currentTarget.innerText = "";
         updatePosition();
       }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        e.currentTarget.innerText = lastSubmittedCommand ?? "";
+        updatePosition();
+      }
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        e.currentTarget.innerText = "";
+        updatePosition();
+      }
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

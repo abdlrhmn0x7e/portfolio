@@ -121,7 +121,7 @@ export const PROJECTS: Project[] = [
 
 export const TERMINAL_COMMANDS = [
   {
-    command: "cd",
+    command: "cd <directory>",
     description: "Navigate to a directory",
   },
   {
@@ -151,6 +151,10 @@ export const TERMINAL_COMMANDS = [
   {
     command: "fastfetch",
     description: "Show system information",
+  },
+  {
+    command: "ai <prompt>",
+    description: "Generate a response using AI",
   },
 ] as const;
 

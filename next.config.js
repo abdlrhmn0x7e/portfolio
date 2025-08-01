@@ -15,6 +15,7 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  reactStrictMode: false,
 };
 
 /** @type {import('rehype-pretty-code').Options} */

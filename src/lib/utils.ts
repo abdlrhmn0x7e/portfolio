@@ -41,3 +41,7 @@ export function levenshtein(a: string, b: string): number {
   }
   return matrix[bn]![an]!;
 }
+
+export function removeSurroundingQuotes(str: string) {
+  return str.replace(/^['"]|['"]$/g, "");
+}

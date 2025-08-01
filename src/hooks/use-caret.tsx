@@ -60,7 +60,6 @@ export function useCaret() {
       const { inputType } = e;
 
       switch (inputType) {
-        case "insertParagraph":
         case "formatBold":
         case "formatItalic":
         case "formatUnderline":
@@ -90,6 +89,7 @@ export function useCaret() {
         case "insertFromSelect":
         case "insertFromSelectMany":
         case "insertFromSelectMany":
+        case "insertParagraph":
           updatePosition();
           return;
       }

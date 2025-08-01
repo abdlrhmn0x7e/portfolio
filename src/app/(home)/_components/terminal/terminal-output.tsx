@@ -1,10 +1,20 @@
 "use client";
 
-import { ArrowRight, XCircle } from "lucide-react";
-import Image from "next/image";
 import { memo } from "react";
+
+import Image from "next/image";
+import Link from "next/link";
+
+import { ArrowRight, XCircle } from "lucide-react";
+import { IconBrandGithub, IconGlobe } from "@tabler/icons-react";
+
+import { format } from "date-fns";
+
 import type { Blog } from "~/app/blog/(index)/utils";
+import type { Directory } from "~/lib/types";
+
 import { useTerminalContext } from "./terminal-context";
+
 import {
   DIRECTORIES,
   HOUSE_ASCII_ART,
@@ -12,14 +22,15 @@ import {
   PROJECTS,
   TERMINAL_COMMANDS,
 } from "~/lib/constants";
-import { cn, levenshtein } from "~/lib/utils";
-import type { Directory } from "~/lib/types";
-import { format } from "date-fns";
-import Link from "next/link";
-import { IconBrandGithub, IconGlobe } from "@tabler/icons-react";
+import { cn, levenshtein, removeSurroundingQuotes } from "~/lib/utils";
+import { AiOutput } from "./ai-output";
 
 function Comp({ blogs }: { blogs: Blog[] }) {
   const { lastSubmittedCommand, previousCwd } = useTerminalContext();
+  const [command, ...args] = lastSubmittedCommand?.trimEnd().split(" ") ?? [
+    "",
+    "",
+  ];
 
   return (
     <div>
@@ -43,7 +54,8 @@ function Comp({ blogs }: { blogs: Blog[] }) {
             className="text-chart-4 w-full font-semibold caret-transparent outline-none"
             spellCheck={false}
           >
-            {lastSubmittedCommand}
+            {command}{" "}
+            <span className="text-muted-foreground">{args.join(" ")}</span>
           </p>
         </div>
       </div>
@@ -63,6 +75,19 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
   const [command, ...args] = lastSubmittedCommand.trimEnd().split(" ");
 
   switch (command) {
+    case "ai": {
+      if (args.length === 0) {
+        return <p>No prompt found</p>;
+      }
+
+      return (
+        <AiOutput
+          key={lastSubmittedCommand}
+          prompt={removeSurroundingQuotes(args.join(" "))}
+        />
+      );
+    }
+
     case "ls": {
       if (currentCwd === "~") {
         return (

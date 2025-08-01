@@ -33,7 +33,9 @@ export function AiOutput({ prompt }: { prompt: string }) {
         <div key={message.id}>
           {message.parts.map((part, index) =>
             part.type === "text" ? (
-              <span key={`${message.id}-${index}`}>{part.text}</span>
+              <span key={`${message.id}-${index}`} className="text-chart-1">
+                {part.text}
+              </span>
             ) : null,
           )}
         </div>

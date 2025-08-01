@@ -5,7 +5,6 @@ import cliSpinners from "cli-spinners";
 export function AiOutput({ prompt }: { prompt: string }) {
   const { messages, sendMessage, status, stop, setMessages } = useChat();
   const isPending = status !== "ready";
-  console.log("messages", messages);
 
   // Generate a response when the component mounts
   useEffect(() => {

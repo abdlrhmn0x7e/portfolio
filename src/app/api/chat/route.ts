@@ -13,9 +13,7 @@ export async function POST(req: Request) {
     model: google("gemini-2.5-flash"),
     prompt: convertToModelMessages(messages),
     abortSignal: req.signal,
-    onAbort: () => {
-      console.log("ai aborted");
-    },
+
     system: `
       You are a helpful, honest, and concise AI assistant named Frieren, designed to answer questions about a software engineer named Abdalrahman.
 

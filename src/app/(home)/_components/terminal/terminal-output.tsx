@@ -184,9 +184,22 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
       return null;
     }
 
-    case "rm -rf /": {
+    case "rm": {
+      if (args[0] === "-rf" && args[1] === "/") {
+        return (
+          <Image
+            src="/images/its-ok.png"
+            alt="rm -rf"
+            width={200}
+            height={200}
+          />
+        );
+      }
+
       return (
-        <Image src="/images/its-ok.png" alt="rm -rf" width={200} height={200} />
+        <p className="text-chart-3 dark:text-chart-5">
+          You can only delete the root directory.
+        </p>
       );
     }
 

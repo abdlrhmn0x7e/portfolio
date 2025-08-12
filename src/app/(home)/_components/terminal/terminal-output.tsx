@@ -88,6 +88,14 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
       );
     }
 
+    case "echo": {
+      if (args.length === 0) {
+        return <p>echo: no string specified</p>;
+      }
+
+      return <p>{args.join(" ")}</p>;
+    }
+
     case "ls": {
       if (currentCwd === "~" && args.length === 0) {
         return (

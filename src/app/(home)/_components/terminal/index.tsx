@@ -28,6 +28,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
   const handleCommandSubmit = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Enter" && e.currentTarget.innerText) {
+        e.preventDefault();
         const fullCommand = e.currentTarget.innerText;
         setLastSubmittedCommand(fullCommand);
 
@@ -90,7 +91,8 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
 
   return (
     <div
-      className="bg-card min-h-[calc(100svh-28rem)] w-full space-y-2 overflow-y-auto rounded-lg border pb-8"
+      className="bg-card h-[calc(100svh-28rem)] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
+      style={{ overflowAnchor: "none" }}
       onClick={() => ref.current?.focus()}
     >
       <TerminalHeader
@@ -123,6 +125,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
             contentEditable
             onKeyDown={handleCommandSubmit}
             ref={ref}
+            style={{ overflowAnchor: "none" }}
           />
 
           <Caret

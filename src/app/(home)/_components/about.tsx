@@ -63,17 +63,6 @@ export async function About() {
                 <span className="hidden md:block">abdlrhmn0x7e</span>
               </a>
             </Button>
-
-            <Button variant="outline" size="sm" asChild>
-              <a
-                href="mailto:abdalrahman.vim@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Mail />
-                <span className="hidden md:block">Email</span>
-              </a>
-            </Button>
           </div>
         </div>
         <div className="flex flex-col gap-3">
@@ -97,9 +86,15 @@ export async function About() {
                 <span>Egypt</span>
               </Badge>
 
-              <Badge variant="outline">
-                <Mail />
-                <span>abdalrahman.vim@gmail.com</span>
+              <Badge variant="outline" asChild>
+                <a
+                  href="mailto:abdalrahman.vim@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Mail />
+                  <span>abdalrahman.vim@gmail.com</span>
+                </a>
               </Badge>
 
               <Badge variant="outline">
@@ -111,13 +106,13 @@ export async function About() {
 
           <p className="text-muted-foreground text-sm md:text-base">
             {`
-              I'm a full-stack web developer specializing in Next.js and the modern
-              JavaScript/TypeScript ecosystem. I build fast, scalable, and maintainable
-              applications—end to end. With hands-on experience across a wide range of tools
-              and frameworks (Next.js, React, Tailwind, Node.js, Bun, Hono, Drizzle, Postgres, and more),
-              I move quickly without breaking things (too often). I'm a fast learner, deeply curious,
-              and comfortable diving into unfamiliar stacks to solve real-world problems.
-              oh and I use Arch btw.
+              I’m a full-stack web developer who lives in the Next.js 
+              and modern JavaScript/TypeScript ecosystem. I pick up new 
+              tools fast and use whatever gets the job done—React, Tailwind, 
+              Node.js, Bun, Hono, Drizzle, Postgres, you name it. I care about 
+              clean architecture, not cargo-culting trends. I like solving real 
+              problems, shipping fast, and keeping things maintainable. 
+              Oh, and I use Arch btw.
             `}
           </p>
         </div>

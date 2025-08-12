@@ -19,6 +19,13 @@ export const metadata: Metadata = {
               oh and I use Arch btw.
             `,
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  openGraph: {
+    images: [
+      {
+        url: "/og-image.png",
+      },
+    ],
+  },
 };
 
 const geist = Geist_Mono({

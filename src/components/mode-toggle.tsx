@@ -34,17 +34,13 @@ export function ModeToggle() {
   };
 
   React.useEffect(() => {
-    if (!boringMode) {
-      return;
-    }
-
     const parsedThemeMode = themeModeSchema.safeParse(theme);
     if (!parsedThemeMode.success) {
       return;
     }
 
     changeThemeVariables(parsedThemeMode.data, boringMode);
-  }, [theme, boringMode, setBoringMode]);
+  }, [theme, boringMode]);
 
   return (
     <DropdownMenu>

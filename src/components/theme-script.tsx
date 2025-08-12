@@ -10,7 +10,7 @@ export function ThemeScript() {
 
 			try {
 				themeMode = localStorage.getItem("theme");
-				boringMode = localStorage.getItem("boring-mode");
+				boringMode = JSON.parse(localStorage.getItem("boring-mode") ?? "false");
 			} catch (error) {
 				console.error(error);
 			}

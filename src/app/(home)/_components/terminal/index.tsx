@@ -117,7 +117,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
 
         <div className="group relative w-full pr-12">
           <div
-            className="peer text-chart-4 w-full font-semibold caret-transparent outline-none"
+            className="peer dark:text-chart-4 text-chart-2 w-full font-semibold caret-transparent outline-none"
             spellCheck={false}
             autoCorrect="off"
             autoCapitalize="off"

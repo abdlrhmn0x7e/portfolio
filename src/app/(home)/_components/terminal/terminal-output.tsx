@@ -51,7 +51,7 @@ function Comp({ blogs }: { blogs: Blog[] }) {
 
         <div className="group relative w-full pr-12">
           <p
-            className="text-chart-4 w-full font-semibold caret-transparent outline-none"
+            className="dark:text-chart-4 text-chart-2 w-full font-semibold caret-transparent outline-none"
             spellCheck={false}
           >
             {command}{" "}

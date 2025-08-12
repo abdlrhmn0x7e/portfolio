@@ -48,7 +48,7 @@ export function Header() {
                 <Button
                   variant="link"
                   asChild
-                  className={cn(pathname === link.href && "text-chart-4")}
+                  className={cn(pathname === link.href && "text-chart-2")}
                 >
                   <Link href={link.href}>{link.label}</Link>
                 </Button>

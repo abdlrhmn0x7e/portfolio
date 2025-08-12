@@ -6,6 +6,7 @@ import { ThemeProvider } from "~/components/providers/theme-provider";
 import { Header } from "~/components/header";
 import { MaxWidthWrapper } from "~/components/max-width-wrapper";
 import { Footer } from "~/components/footer";
+import { ThemeScript } from "~/components/theme-script";
 
 export const metadata: Metadata = {
   title: "abdlrhmn0x7e | Full-Stack Web Developer",
@@ -30,6 +31,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"

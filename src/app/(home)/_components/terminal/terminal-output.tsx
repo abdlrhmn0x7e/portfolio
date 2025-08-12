@@ -89,7 +89,7 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
     }
 
     case "ls": {
-      if (currentCwd === "~") {
+      if (currentCwd === "~" && args.length === 0) {
         return (
           <ul className="flex list-none flex-wrap items-center gap-8">
             {DIRECTORIES.filter((d) => d !== currentCwd).map((d) => (
@@ -104,63 +104,45 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
         );
       }
 
-      if (currentCwd === "projects") {
-        return (
-          <ul className="list-decimal space-y-1 pl-8">
-            {PROJECTS.map((p) => (
-              <li
-                className="text-chart-1 dark:text-primary flex items-center gap-2 font-semibold"
-                key={p.title}
-              >
-                {p.title} -{" "}
-                <div className="flex items-center gap-6">
-                  {p.links.github && (
-                    <Link
-                      href={p.links.github}
-                      target="_blank"
-                      className="flex items-center gap-2 hover:underline"
-                    >
-                      <IconBrandGithub className="h-4 w-4" />
-                      GitHub
-                    </Link>
-                  )}
-                  {p.links.preview && (
-                    <Link
-                      href={p.links.preview}
-                      target="_blank"
-                      className="flex items-center gap-2 hover:underline"
-                    >
-                      <IconGlobe className="h-4 w-4" />
-                      Preview
-                    </Link>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        );
+      if (currentCwd === "~" && args.length === 1) {
+        switch (args[0]) {
+          case "projects": {
+            return <ProjectsDirectory />;
+          }
+          case "blog": {
+            return <BlogDirectory blogs={blogs} />;
+          }
+          default: {
+            return (
+              <p className="text-chart-3 dark:text-chart-5">
+                Directory not found, did you mean{" "}
+                <code className="bg-accent px-1 py-0.5">projects</code> or{" "}
+                <code className="bg-accent px-1 py-0.5">blog</code>?
+              </p>
+            );
+          }
+        }
       }
 
-      if (currentCwd === "blog") {
-        return (
-          <ul className="list-decimal space-y-1 pl-8">
-            {blogs.map((b) => (
-              <li
-                className="text-chart-1 dark:text-primary font-semibold"
-                key={b.title}
-              >
-                <Link href={`/blog/${b.slug}`} className="hover:underline">
-                  {b.title} - {format(b.date, "MMM d, yyyy")}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        );
+      if (currentCwd === "projects" && args.length === 0) {
+        return <ProjectsDirectory />;
       }
+
+      if (currentCwd === "blog" && args.length === 0) {
+        return <BlogDirectory blogs={blogs} />;
+      }
+
+      return (
+        <p className="text-chart-3 dark:text-chart-5">Directory not found</p>
+      );
     }
 
     case "cd": {
-      if (args[0] && !DIRECTORIES.includes(args[0] as Directory)) {
+      if (
+        args[0] &&
+        !DIRECTORIES.includes(args[0] as Directory) &&
+        args[0] !== ".."
+      ) {
         // if the directory is not found, find the closest directory
         let closestDirectory = "";
         let closestDistance = Infinity;
@@ -279,6 +261,60 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
       );
     }
   }
+}
+
+function ProjectsDirectory() {
+  return (
+    <ul className="list-decimal space-y-1 pl-8">
+      {PROJECTS.map((p) => (
+        <li
+          className="text-chart-1 dark:text-primary flex items-center gap-2 font-semibold"
+          key={p.title}
+        >
+          {p.title} -{" "}
+          <div className="flex items-center gap-6">
+            {p.links.github && (
+              <Link
+                href={p.links.github}
+                target="_blank"
+                className="flex items-center gap-2 hover:underline"
+              >
+                <IconBrandGithub className="h-4 w-4" />
+                GitHub
+              </Link>
+            )}
+            {p.links.preview && (
+              <Link
+                href={p.links.preview}
+                target="_blank"
+                className="flex items-center gap-2 hover:underline"
+              >
+                <IconGlobe className="h-4 w-4" />
+                Preview
+              </Link>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function BlogDirectory({ blogs }: { blogs: Blog[] }) {
+  return (
+    <ul className="list-decimal space-y-1 pl-8">
+      {blogs.map((b) => (
+        <li
+          className="text-chart-1 dark:text-primary font-semibold"
+          key={b.title}
+        >
+          <Link href={`/blog/${b.slug}`} className="hover:underline">
+            {b.title} - {format(b.date, "MMM d, yyyy")}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export const TerminalOutput = memo(Comp);

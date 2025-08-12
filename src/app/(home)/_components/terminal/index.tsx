@@ -61,6 +61,11 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
               setCurrentCwd("blog");
               break;
             }
+
+            case "..": {
+              setCurrentCwd("~");
+              break;
+            }
           }
         }
 

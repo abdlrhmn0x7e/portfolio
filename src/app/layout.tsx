@@ -7,22 +7,24 @@ import { Header } from "~/components/header";
 import { MaxWidthWrapper } from "~/components/max-width-wrapper";
 import { Footer } from "~/components/footer";
 import { ThemeScript } from "~/components/theme-script";
+import { env } from "~/env";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
   title: "abdlrhmn0x7e | Full-Stack Web Developer",
   description: `I'm a full-stack web developer specializing in Next.js and the modern
-              JavaScript/TypeScript ecosystem. I build fast, scalable, and maintainable
-              applications—end to end. With hands-on experience across a wide range of tools
-              and frameworks (Next.js, React, Tailwind, Node.js, Bun, Hono, Drizzle, Postgres, and more),
-              I move quickly without breaking things (too often). I'm a fast learner, deeply curious,
-              and comfortable diving into unfamiliar stacks to solve real-world problems.
-              oh and I use Arch btw.
-            `,
+                JavaScript/TypeScript ecosystem. I build fast, scalable, and maintainable
+                applications—end to end. With hands-on experience across a wide range of tools
+                and frameworks (Next.js, React, Tailwind, Node.js, Bun, Hono, Drizzle, Postgres, and more),
+                I move quickly without breaking things (too often). I'm a fast learner, deeply curious,
+                and comfortable diving into unfamiliar stacks to solve real-world problems.
+                oh and I use Arch btw.
+              `,
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   openGraph: {
     images: [
       {
-        url: "/og-image.png",
+        url: "/pfp.jpeg",
       },
     ],
   },
@@ -50,7 +52,7 @@ export default function RootLayout({
         >
           <MaxWidthWrapper className="flex min-h-screen flex-col">
             <Header />
-            <main className="mt-12 flex-1">{children}</main>
+            <main className="mt-12 flex-1 md:px-1">{children}</main>
             <Footer />
           </MaxWidthWrapper>
         </ThemeProvider>

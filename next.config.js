@@ -20,7 +20,7 @@ const nextConfig = {
 
 /** @type {import('rehype-pretty-code').Options} */
 const rehypePrettyCodeOptions = {
-  theme: "kanagawa-wave",
+  theme: "vesper",
 };
 
 const withMDX = createMDX({

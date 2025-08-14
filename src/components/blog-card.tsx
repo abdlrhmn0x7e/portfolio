@@ -28,7 +28,12 @@ export function BlogCard({
         {...props}
       >
         <AspectRatio ratio={16 / 9}>
-          <Image src={thumbnail} alt={title} fill className="object-cover" />
+          <Image
+            src={thumbnail}
+            alt={title}
+            fill
+            className="object-cover object-top"
+          />
         </AspectRatio>
         <div className="flex flex-col gap-4">
           <div className="space-y-2">

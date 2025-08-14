@@ -7,7 +7,7 @@ export default async function BlogPage() {
   const blogs = await getBlogsMetadata();
 
   return (
-    <div className="space-y-12">
+    <section className="space-y-12 py-12">
       <H1 className="text-center">
         Thoughts, tutorials, and insights from my development journey
       </H1>
@@ -25,6 +25,6 @@ export default async function BlogPage() {
           <BlogsEmptyState />
         )}
       </div>
-    </div>
+    </section>
   );
 }

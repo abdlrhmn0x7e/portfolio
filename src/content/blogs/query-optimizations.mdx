@@ -1,0 +1,443 @@
+---
+title: "SQL Query Optimizations"
+description: "Why your queries are slow (it's probably your fault)"
+date: "2025-08-13"
+thumbnail: "/images/blogs/query-optimizations.jpg"
+readingTime: 10
+---
+
+## Contents
+
+## Introduction
+
+SQL hasn't historically been my strongest subject in backend development. I used to think it was a pain to write and debug, but I've come to realize it's a powerful lever for your application's performance. By the end of this post, I hope you'll write better queries and optimize your application's performance.
+
+## Example table
+
+Here's the table we'll be using throughout this blog post:
+
+```sql
+CREATE TABLE users (
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	first_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL UNIQUE,
+	birthday DATE NOT NULL,
+	is_pro BOOLEAN NOT NULL DEFAULT FALSE,
+	deleted_at TIMESTAMP,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+and let's generate 1 million rows of data:
+
+```sql
+INSERT INTO users (first_name, last_name, email, birthday, is_pro, deleted_at, created_at)
+SELECT
+  substr(md5(random()::text),1,12),               -- first_name (random-ish)
+  substr(md5(random()::text),1,12),               -- last_name
+  substr(md5(random()::text),1,12) || '@ex.com',  -- email
+  (date '1970-01-01' + (trunc(random()*20000)::int))::date,
+  (random() < 0.05),                               -- is_pro ~5%
+  CASE WHEN random() < 0.05
+       THEN now() - (random()*1000 || ' days')::interval
+       ELSE NULL END,
+  now() - (random()*3650 || ' days')::interval
+FROM generate_series(1, 1000000);
+```
+
+## How to check query performance
+
+Before we start, it's important to understand how to check the performance of a query.
+Luckily, SQL has two commands that can help with that:
+
+1. `EXPLAIN`
+2. `EXPLAIN ANALYZE`
+
+### The EXPLAIN command
+
+The EXPLAIN command is a built-in function in SQL that allows you to see
+the execution plan of a query. It's a great way to see how the query is being
+executed and how it can be optimized.
+
+```sql
+EXPLAIN
+SELECT * FROM users
+WHERE is_pro = FALSE AND birthday > '1990-01-01'
+ORDER BY birthday DESC
+LIMIT 50;
+```
+
+Here's an example of how the output should look:
+
+```
+Query Plan
+----------------------------------------------------------
+Limit  (cost=28882.82..28888.66 rows=50 width=83)
+  ->  Gather Merge  (cost=28882.82..87807.80 rows=505036 width=83)
+        Workers Planned: 2
+        ->  Sort  (cost=27882.80..28514.09 rows=252518 width=83)
+              Sort Key: birthday DESC
+              ->  Parallel Seq Scan on users  (cost=0.00..19494.33 rows=252518 width=83)
+                    Filter: ((NOT is_pro) AND (birthday > '1990-01-01'::date))
+```
+
+This tree-like structure is called a "query plan".
+It's read from the most inner node to the most outer node (a node is any part that starts with a `->`).
+So in this case, the query plan is:
+
+1. Parallel Sequential Scan on users (note the filter on the users table)
+2. Sort by birthday (descending)
+3. Limit 50 (a limit of 50 rows)
+
+Anything that doesn't have a `->` (not a node) is a property/attribute of that node.
+
+Now, why is this important? The query plan shows us two important things:
+
+1. The cost of the query
+2. The number of rows that will be returned
+
+Those values should be taken with a grain of salt because they are heuristics, not exact values.
+
+### The cost
+
+The cost is the amount of resources that the query will take to execute. It's an abstract value used to compare the performance of different queries.
+
+### The number of rows
+
+The number of rows is how many rows will be returned by the query
+(returned to the upper layer, not just scanned).
+It's a good indicator of the query's performance.
+
+## The EXPLAIN ANALYZE command
+
+The EXPLAIN ANALYZE command is a built-in function in SQL that shows both
+the execution plan and the actual execution time of the query.
+
+```sql
+EXPLAIN ANALYZE
+SELECT * FROM users
+WHERE is_pro = FALSE AND birthday > '1990-01-01'
+ORDER BY birthday DESC
+LIMIT 50;
+```
+
+The difference between `EXPLAIN` and `EXPLAIN ANALYZE`
+is that `EXPLAIN ANALYZE` **executes the query and returns the actual execution time**.
+This means any querying, updating, or deleting will actually run—be careful.
+
+```
+Query Plan
+----------------------------------------------------------
+Limit  (cost=28882.82..28888.66 rows=50 width=83) (actual time=43.117..46.087 rows=50 loops=1)
+  ->  Gather Merge  (cost=28882.82..87807.80 rows=505036 width=83) (actual time=43.115..46.082 rows=50 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        ->  Sort  (cost=27882.80..28514.09 rows=252518 width=83) (actual time=32.476..32.478 rows=41 loops=3)
+              Sort Key: birthday DESC
+              Sort Method: top-N heapsort  Memory: 36kB
+              Worker 0:  Sort Method: top-N heapsort  Memory: 36kB
+              Worker 1:  Sort Method: top-N heapsort  Memory: 36kB
+              ->  Parallel Seq Scan on users  (cost=0.00..19494.33 rows=252518 width=83) (actual time=0.032..22.984 rows=201035 loops=3)
+                    Filter: ((NOT is_pro) AND (birthday > '1990-01-01'::date))
+                    Rows Removed by Filter: 132298
+Planning Time: 0.120 ms
+Execution Time: 46.111 ms
+```
+
+As you can see, it returned the same query plan as `EXPLAIN`,
+but with additional information. What's important to us is the actual execution time.
+
+### The actual time
+
+The actual execution time is how long the query took to run.
+It's formatted like this: `actual time=0.730..0.769 rows=239 loops=1`,
+which means the query started returning rows at 0.730 ms and finished at 0.769 ms.
+
+## Query Optimization Techniques
+
+Now that we've learned how to measure query performance, we can start to
+optimize it. There are many techniques for query optimization,
+but the most common one is indexing.
+
+### Indexing
+
+Indexes are a fantastic way to speed up queries. An index is a data structure
+used to accelerate data retrieval from a database (often a B-tree).
+
+To create an index, use the following syntax:
+
+```sql
+CREATE INDEX idx_users_birthday ON users (birthday);
+```
+
+There are many types of indexes; the most common include:
+
+1. **Composite Index** - an index on multiple columns
+2. **Partial Index** - an index on a subset of the table
+3. **Unique Index** - an index on a unique column
+4. **Functional Index** - an index on a function of a column
+
+Before we dive into an example that we might use indexes in, let's first answer some common pitfalls:
+
+> **When should you use an index?**
+
+The answer depends on your data access patterns.
+A good rule of thumb: if you frequently filter, sort, or join by a column,
+consider creating an index on that column.
+
+Another important factor when creating an index is the column's cardinality.
+
+> **What is column cardinality?**
+
+Cardinality is the number of unique values in a column divided by the total number of rows in the table.
+
+For example, if you have a table with 1000 rows and a column with values `1, 2, 3, 4, 5`, the cardinality is 5/1000 = 0.005.
+
+The higher the cardinality, the more useful the index tends to be.
+
+Why is cardinality so important?
+Most database engines will not use an index if the column's cardinality is too low.
+In that case, you end up maintaining a data structure that isn't worth the cost.
+
+> **“I'll just create an index on every column.”**
+
+This is not a good idea. It will take a lot of space and slow down inserts and updates.
+Indexes are data structures, which means:
+
+1. They take up space.
+2. They must be updated when the data changes.
+
+Maintaining indexes is not free—it takes time and resources.
+Create indexes only on the columns you use most.
+
+Now let's look at a couple of examples where indexes help:
+
+#### Example
+
+Assume we want to get the 50 most recent users that are not deleted and are pro users.
+
+```sql
+SELECT id, first_name, last_name, email, created_at
+FROM users
+WHERE is_pro = true
+  AND deleted_at IS NULL
+  AND created_at >= '2024-01-01'
+ORDER BY created_at DESC
+LIMIT 50;
+```
+
+Let's run EXPLAIN ANALYZE to compare performance before and after indexing:
+
+```sql
+EXPLAIN ANALYZE
+SELECT id, first_name, last_name, email, created_at
+FROM users
+WHERE is_pro = true
+  AND deleted_at IS NULL
+  AND created_at >= '2024-01-01'
+ORDER BY created_at DESC
+LIMIT 50;
+
+/*
+Output:
+  ->  Gather Merge  (cost=20602.55..21362.57 rows=6514 width=62) (actual time=26.600..28.721 rows=50 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        ->  Sort  (cost=19602.53..19610.67 rows=3257 width=62) (actual time=21.204..21.206 rows=41 loops=3)
+              Sort Key: created_at DESC
+              Sort Method: top-N heapsort  Memory: 36kB
+              Worker 0:  Sort Method: top-N heapsort  Memory: 36kB
+              Worker 1:  Sort Method: top-N heapsort  Memory: 37kB
+              ->  Parallel Seq Scan on users  (cost=0.00..19494.33 rows=3257 width=62) (actual time=0.080..20.744 rows=2574 loops=3)
+                    Filter: (is_pro AND (deleted_at IS NULL) AND (created_at >= '2024-01-01 00:00:00'::timestamp without time zone))
+                    Rows Removed by Filter: 330759
+Planning Time: 0.665 ms
+Execution Time: 28.786 ms
+*/
+
+```
+
+Remember what makes a good index: it targets columns commonly used in
+WHERE filters, ORDER BY, or JOINs.
+
+In this case, the columns most commonly used are:
+
+1. `is_pro`
+2. `deleted_at`
+3. `created_at`
+
+The second thing to consider is column cardinality.
+How can we measure it? Use queries like these:
+
+```sql
+SELECT COUNT(DISTINCT is_pro)/COUNT(*)::numeric FROM users;
+SELECT COUNT(DISTINCT deleted_at)/COUNT(*)::numeric FROM users;
+SELECT COUNT(DISTINCT created_at)/COUNT(*)::numeric FROM users;
+
+-- Output:
+-- 0.000002 (0.0002%)
+-- 0.050528 (5.0528%)
+-- 1.000000 (100%)
+```
+
+This suggests `created_at` is the most selective, but wait!
+Is `is_pro` a good candidate for an index? Yes and no.
+It's not ideal for a regular index, but it can be great for a partial index
+because there aren't many pro users. That means a filtered index can drastically
+narrow the rows to scan.
+
+Since we have a single query using multiple columns, we can create a partial index
+on `created_at` (the most selective column) that covers this query:
+
+```sql
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_users_created_at
+ON users (created_at)
+WHERE
+	is_pro = true
+	AND
+	deleted_at IS NULL;
+```
+
+Now let's run EXPLAIN ANALYZE again:
+
+```sql
+EXPLAIN ANALYZE
+SELECT id, first_name, last_name, email, created_at
+FROM users
+WHERE is_pro = true
+  AND deleted_at IS NULL
+  AND created_at >= '2024-01-01'
+ORDER BY created_at DESC
+LIMIT 50;
+
+/*
+Output:
+	Limit  (cost=0.29..158.78 rows=50 width=62) (actual time=0.043..0.335 rows=50 loops=1)
+		->  Index Scan Backward using idx_users_created_at on users  (cost=0.29..24775.58 rows=7816 width=62) (actual time=0.040..0.317 rows=50 loops=1)
+					Index Cond: (created_at >= '2024-01-01 00:00:00'::timestamp without time zone)
+	Planning Time: 0.560 ms
+	Execution Time: 0.380 ms
+*/
+```
+
+As you can see, the query plan is much better now. It's using the partial index and is much faster.
+Another option would be a composite index on the commonly used columns,
+but it likely wouldn't be as efficient as the partial index for this specific query.
+
+Here's how to create that composite index:
+
+```sql
+CREATE INDEX idx_users_is_pro_deleted_at_created_at ON users (is_pro, deleted_at, created_at);
+```
+
+There's a small caveat with composite indexes: the left-prefix rule.
+
+> **What is the left prefix rule?**
+
+The left-prefix rule states that if you have a composite index on columns (A, B, C),
+and you query on (A, B), the index will be used. If you query on (B, C), it will not.
+If you query on (A, C), most databases will not use it either.
+(PostgreSQL is an exception with some cases due to more sophisticated planning.)
+
+## Common Indexing Mistakes to Avoid
+
+1. **Over-indexing**: Don't create indexes on every column.
+2. **Wrong column order**: Put the most selective column first in composite indexes.
+3. **Ignoring cardinality**: Low-cardinality columns (like boolean flags) often don't benefit from regular indexes.
+4. **Forgetting partial indexes**: Use them for filtered queries.
+
+## Other common query mistakes
+
+Now that we've discussed the elephant (indexing) in the room, let's discuss some other common query mistakes
+that could be causing your queries to be slow.
+
+### 1. Using SELECT \*
+
+Always select only the columns you need. Selecting all columns can slow queries
+due to unnecessary I/O—especially with wide rows or large types like TEXT, BLOB, or JSON.
+
+### 2. Functions or expressions on indexed columns
+
+Functions or expressions applied to indexed columns usually prevent the index from being used.
+
+For example, if you have an index on the `email` column, the following query will not use the index:
+
+```sql
+CREATE INDEX idx_users_email ON users (email);
+
+SELECT * FROM users WHERE lower(email) LIKE '%@example.com';
+```
+
+The reason is that the `email` index does not cover `lower(email)`.
+To fix this, create a functional index on the expression:
+
+```sql
+CREATE INDEX idx_users_email ON users (lower(email));
+```
+
+This allows the index to be used and makes the query faster.
+
+### 3. Correlated subqueries instead of JOINs
+
+Correlated subqueries are queries that depend on the outer query's current row.
+
+For this example, we'll add a simple `posts` table:
+
+```sql
+CREATE TABLE posts (
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	user_id BIGINT NOT NULL REFERENCES users(id),
+	content TEXT NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+If you have a query that selects all users who have 15+ posts, you might write:
+
+```sql
+SELECT * FROM users
+WHERE EXISTS (
+	SELECT 1 FROM posts
+	WHERE posts.user_id = users.id
+	GROUP BY posts.user_id
+	HAVING COUNT(posts.id) >= 15
+);
+```
+
+This can be slow because it may scan parts of the `users` table repeatedly for each row.
+
+Instead, use a JOIN:
+
+```sql
+SELECT * FROM users
+JOIN posts ON posts.user_id = users.id
+GROUP BY users.id
+HAVING COUNT(posts.id) >= 15;
+```
+
+Or use a subquery with an `IN` clause:
+
+```sql
+SELECT * FROM users
+WHERE id IN (
+	SELECT user_id FROM posts GROUP BY user_id HAVING COUNT(id) >= 15
+);
+```
+
+## Conclusion
+
+Great performance comes from a mix of smart indexing, clean query design, and constant measurement. Key takeaways:
+
+1. **Always measure first**: Use `EXPLAIN ANALYZE` to understand your query's plan and timing.
+2. **Index strategically**: Focus on columns used in WHERE, ORDER BY, and JOIN clauses.
+3. **Consider cardinality**: High-cardinality columns make better index candidates.
+4. **Use partial indexes**: They're perfect for filtered queries and save space.
+5. **Avoid `SELECT *`**: Fetch only the columns you need to reduce I/O, especially with wide rows.
+6. **Don't wrap indexed columns in functions**: Either rewrite the predicate or create a functional index.
+7. **Prefer JOINs (or IN with a pre-aggregated subquery) over correlated subqueries** when possible.
+
+Start with the queries that are actually slow, change one thing at a time, and re-measure. The improvement shown above (from 28.786 ms to 0.380 ms) is a **~75x speedup**—the kind of optimization that materially improves user experience.
+
+Happy querying, nerds!

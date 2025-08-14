@@ -1,6 +1,34 @@
 import { PlusIcon } from "lucide-react";
 import { getBlogsMetadata } from "../(index)/utils";
 import { BlogHeader } from "./_components/blog-header";
+import { env } from "~/env";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const { frontmatter } = (await import(`~/content/blogs/${slug}.mdx`)) as {
+    frontmatter: { title: string; description: string; thumbnail: string };
+  };
+
+  return {
+    metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
+    title: `${frontmatter.title} | abdlrhmn0x7e`,
+    description: frontmatter.description,
+    openGraph: {
+      title: frontmatter.title,
+      description: frontmatter.description,
+      images: [frontmatter.thumbnail],
+    },
+    twitter: {
+      title: frontmatter.title,
+      description: frontmatter.description,
+      images: [frontmatter.thumbnail],
+    },
+  };
+}
 
 export default async function BlogPage({
   params,

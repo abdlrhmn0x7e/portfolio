@@ -100,17 +100,17 @@ Now, why is this important? The query plan shows us two important things:
 
 Those values should be taken with a grain of salt because they are heuristics, not exact values.
 
-### The cost
+### Cost
 
 The cost is the amount of resources that the query will take to execute. It's an abstract value used to compare the performance of different queries.
 
-### The number of rows
+### Number of rows
 
 The number of rows is how many rows will be returned by the query
 (returned to the upper layer, not just scanned).
 It's a good indicator of the query's performance.
 
-## The EXPLAIN ANALYZE command
+## EXPLAIN ANALYZE command
 
 The EXPLAIN ANALYZE command is a built-in function in SQL that shows both
 the execution plan and the actual execution time of the query.
@@ -149,7 +149,7 @@ Execution Time: 46.111 ms
 As you can see, it returned the same query plan as `EXPLAIN`,
 but with additional information. What's important to us is the actual execution time.
 
-### The actual time
+### Actual time
 
 The actual execution time is how long the query took to run.
 It's formatted like this: `actual time=0.730..0.769 rows=239 loops=1`,

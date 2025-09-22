@@ -79,9 +79,8 @@ export const PROJECTS: Project[] = [
 									designed to streamline car registration, service tracking, 
 									and administrative operations. Built with modern technologies 
 									in a scalable monorepo architecture.`,
-    image: "/images/projects/shafei.png",
     links: {
-      preview: "https://shafei-web.vercel.app",
+      preview: "https://shafei.vercel.app",
     },
   },
   {
@@ -91,7 +90,6 @@ export const PROJECTS: Project[] = [
 		 Architected and developed the complete full-stack learning management system featuring 
 		 video streaming, quizzes, progress tracking, and payment integration.
 		`,
-    image: "/images/projects/sputnik.png",
     links: {
       github: "https://github.com/abdlrhmn0x7e/sputnik",
     },
@@ -102,7 +100,6 @@ export const PROJECTS: Project[] = [
 		built with cutting-edge web technologies. Create, customize, and 
 		buy phone cases. built with Next.js, Tailwind, and PostgreSQL. featuring
 		stripe payment integration, product management, and a responsive design.`,
-    image: "/images/projects/casecobra.webp",
     links: {
       github: "https://github.com/abdlrhmn0x7e/casecobra",
       preview: "https://casecobra-lake-iota.vercel.app",
@@ -111,7 +108,6 @@ export const PROJECTS: Project[] = [
   {
     title: "PingPanda",
     description: `A modern SAAS landing page for real time discord notifications, built with Next.js, Tailwind, and PostgreSQL.`,
-    image: "/images/projects/pingpanda.webp",
     links: {
       github: "https://github.com/abdlrhmn0x7e/pingpanda",
       preview: "https://ping-panda-beta-one.vercel.app",

@@ -10,7 +10,6 @@ export interface TerminalCommand {
 export interface Project {
   title: string;
   description: string;
-  image: string;
   links: {
     github?: string;
     preview?: string;

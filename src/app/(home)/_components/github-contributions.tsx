@@ -8,9 +8,30 @@ import {
 } from "~/components/ui/tooltip";
 import { getClient } from "~/lib/apollo-client";
 import { cn } from "~/lib/utils";
-import type { Query } from "~/types/__generated__/graphql";
 
-const USER_CONTRIBUTION_QUERY: TypedDocumentNode<Query, undefined> = gql`
+type UserContributionQuery = {
+  viewer: {
+    contributionsCollection: {
+      contributionCalendar: {
+        totalContributions: number;
+        weeks: {
+          firstDay: string;
+          contributionDays: {
+            date: string;
+            color: string;
+            weekday: number;
+            contributionCount: number;
+          }[];
+        }[];
+      };
+    };
+  };
+};
+
+const USER_CONTRIBUTION_QUERY: TypedDocumentNode<
+  UserContributionQuery,
+  undefined
+> = gql`
   {
     viewer {
       contributionsCollection {
@@ -61,7 +82,7 @@ export async function GithubContributions() {
           {data?.viewer?.contributionsCollection?.contributionCalendar?.weeks
             .slice(15)
             .map((week) => {
-              const month = format(new Date(week.firstDay as string), "MMM");
+              const month = format(new Date(week.firstDay), "MMM");
 
               function renderMonth() {
                 if (monthsSet.has(month)) {
@@ -73,14 +94,14 @@ export async function GithubContributions() {
 
               return (
                 <div
-                  key={new Date(week.firstDay as string).getTime()}
+                  key={new Date(week.firstDay).getTime()}
                   className="flex w-3 flex-col gap-1"
                 >
                   {renderMonth()}
 
                   {week.contributionDays.map((day) => (
                     <Tooltip
-                      key={`${day.contributionCount}-${new Date(day.date as string).getTime()}`}
+                      key={`${day.contributionCount}-${new Date(day.date).getTime()}`}
                     >
                       <TooltipTrigger asChild>
                         <div
@@ -97,7 +118,7 @@ export async function GithubContributions() {
                       <TooltipContent>
                         <p>
                           {day.contributionCount} contributions on{" "}
-                          {format(new Date(day.date as string), "MMM d, yyyy")}
+                          {format(new Date(day.date), "MMM d, yyyy")}
                         </p>
                       </TooltipContent>
                     </Tooltip>

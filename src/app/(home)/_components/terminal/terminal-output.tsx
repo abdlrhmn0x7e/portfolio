@@ -36,17 +36,16 @@ function Comp({ blogs }: { blogs: Blog[] }) {
     <div>
       <div className="flex cursor-text items-start gap-2 px-4 pt-2">
         <div className="flex items-center gap-2">
-          <ArrowRight className="h-4 w-4 stroke-2 dark:stroke-3" />
-
           <span
             className={cn(
               "text-chart-3 dark:text-primary font-semibold",
               previousCwd === "~" &&
-                "text-chart-1 dark:text-chart-5 text-xl font-bold",
+                "text-chart-3 dark:text-chart-2 text-xl font-bold",
             )}
           >
             {previousCwd}
           </span>
+          <span className="text-primary">$</span>
         </div>
 
         <div className="group relative w-full pr-12">

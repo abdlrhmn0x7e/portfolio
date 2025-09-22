@@ -2,12 +2,12 @@ import type { ComponentProps } from "react";
 import { cn } from "~/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const variants = cva("dark:bg-foreground bg-chart-2 h-6 w-2.5 duration-200", {
+const variants = cva("dark:bg-foreground bg-chart-1 h-6 w-2.5 duration-200", {
   variants: {
     variant: {
-      default: "",
-      line: "h-5 w-0.5 mt-0.5",
-      underline: "h-px w-3 mt-6",
+      default: "-translate-y-[2.5px]",
+      line: "h-5 w-[1.5px]",
+      underline: "h-px w-3 mt-3",
     },
   },
 });

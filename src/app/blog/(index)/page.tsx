@@ -1,30 +1,24 @@
-import { BlogsEmptyState } from "~/components/blogs-empty-state";
-import { BlogCard } from "~/components/blog-card";
+import Link from "next/link";
 import { getBlogsMetadata } from "./utils";
-import { H1 } from "~/components/ui/h1";
+import { format } from "date-fns";
 
 export default async function BlogPage() {
   const blogs = await getBlogsMetadata();
 
   return (
     <section className="space-y-12 py-12">
-      <H1 className="text-center">
-        Thoughts, tutorials, and insights from my development journey
-      </H1>
-      <div className="flex flex-col gap-4">
-        {blogs.length > 0 ? (
-          blogs.map((blog, index) => (
-            <BlogCard
-              key={blog.slug}
-              {...blog}
-              className="sticky"
-              style={{ top: `${index * 40 + 100}px` }}
-            />
-          ))
-        ) : (
-          <BlogsEmptyState />
-        )}
-      </div>
+      {blogs.map((blog) => (
+        <div key={blog.slug} className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="text-muted-foreground text-sm">
+            <p>{format(new Date(blog.date), "MMM d, yyyy")}</p>
+            <p>{blog.readingTime} min read</p>
+          </div>
+          <Link href={`/blog/${blog.slug}`} className="col-span-3">
+            <p className="hover:underline">{blog.title}</p>
+            <p className="text-muted-foreground text-sm">{blog.description}</p>
+          </Link>
+        </div>
+      ))}
     </section>
   );
 }

@@ -11,20 +11,18 @@ import { env } from "~/env";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
-  title: "abdlrhmn0x7e | Full-Stack Web Developer",
-  description: `I'm a full-stack web developer specializing in Next.js and the modern
-                JavaScript/TypeScript ecosystem. I build fast, scalable, and maintainable
-                applications—end to end. With hands-on experience across a wide range of tools
-                and frameworks (Next.js, React, Tailwind, Node.js, Bun, Hono, Drizzle, Postgres, and more),
-                I move quickly without breaking things (too often). I'm a fast learner, deeply curious,
-                and comfortable diving into unfamiliar stacks to solve real-world problems.
-                oh and I use Arch btw.
-              `,
+  title: "abdlrhmn0x7e",
+  description: `Passionate about creating meaningful software & 
+  exploring new technologies. It's been 3 years since I started 
+  my journey as a software engineer/full-stack developer and I've 
+  been loving it ever since. Actively working on side projects 
+  and learning new things/technologies.  `,
+
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   openGraph: {
     images: [
       {
-        url: "/pfp.jpeg",
+        url: "/opengraph-image.png",
       },
     ],
   },

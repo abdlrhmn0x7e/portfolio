@@ -21,6 +21,7 @@ export async function getBlogsMetadata() {
         description: metadata.description ?? "",
         date: metadata.date ?? new Date().toISOString(),
         thumbnail: metadata.thumbnail ?? "",
+        readingTime: metadata.readingTime ?? 0,
         slug: entry.replace(".mdx", ""),
       };
     }),

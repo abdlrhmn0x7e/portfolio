@@ -6,7 +6,7 @@ interface Position {
 }
 
 export function useCaret() {
-  const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
+  const [position, setPosition] = useState<Position>({ x: 0, y: 2 });
   const ref = useRef<HTMLDivElement>(null);
 
   function getCaretPosition(node: HTMLDivElement) {

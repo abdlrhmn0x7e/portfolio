@@ -5,7 +5,6 @@ import { memo, useCallback, useState } from "react";
 import type { Blog } from "~/app/blog/(index)/utils";
 import { Caret, type CaretVariant } from "~/components/caret";
 import { useCaret } from "~/hooks/use-caret";
-import { ASCII_ART } from "~/lib/constants";
 import { TerminalOutput } from "./terminal-output";
 import { TerminalHeader } from "./terminal-header";
 import { useTerminalContext } from "./terminal-context";
@@ -96,7 +95,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
 
   return (
     <div
-      className="bg-card h-[calc(100svh-28rem)] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
+      className="bg-card h-[512px] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
       style={{ overflowAnchor: "none" }}
       onClick={() => ref.current?.focus()}
     >
@@ -105,19 +104,21 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
         setCaretVariant={setCaretVariant}
       />
 
+      {!lastSubmittedCommand && <MemoizedDefaultOutputPlaceholder />}
+
       {lastSubmittedCommand && <TerminalOutput key={outputKey} blogs={blogs} />}
 
       <div className="flex cursor-text items-center gap-2 px-4 pt-2">
         <div className="flex items-center gap-2">
-          <ArrowRight className="h-4 w-4 stroke-2 dark:stroke-3" />
           <span
             className={cn(
-              "text-chart-1 dark:text-chart-5 font-semibold",
+              "text-chart-3 dark:text-chart-2 font-semibold",
               currentCwd === "~" && "text-xl font-bold",
             )}
           >
             {currentCwd}
           </span>
+          <span className="text-primary">$</span>
         </div>
 
         <div className="group relative w-full pr-12">
@@ -142,21 +143,15 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
           />
         </div>
       </div>
-
-      {!lastSubmittedCommand && <MemoizedDefaultOutputPlaceholder />}
     </div>
   );
 }
 
 function DefaultOutputPlaceholder() {
   return (
-    <div className="text-chart-1 dark:text-chart-4 pointer-events-none mx-auto h-fit w-fit space-y-2 text-center whitespace-pre-wrap select-none">
-      <p className="text-sm sm:text-base">{ASCII_ART}</p>
-      <p className="px-1 text-center text-sm">
-        Try <code className="bg-accent px-1 py-0.5">rm -rf /</code> trust me or{" "}
-        <code className="bg-accent px-1 py-0.5">help</code> to see what you can
-        do...
-      </p>
+    <div className="text-muted-foreground text-center">
+      <p className="text-sm">Welcome to Terminal v1.0</p>
+      <p className="text-xs">Type &apos;help&apos; for available commands</p>
     </div>
   );
 }

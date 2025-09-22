@@ -8,7 +8,6 @@ import { Caret } from "./caret";
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
 import { useLocalStorage } from "~/hooks/use-local-storage";
-import { Separator } from "./ui/separator";
 import {
   IconBrandGithub,
   IconBrandLinkedin,
@@ -115,7 +114,9 @@ export function Header() {
             </div>
           </div>
 
-          <p className="text-muted-foreground text-sm">Alexandria / Egypt</p>
+          <p className="text-muted-foreground text-xs sm:text-sm">
+            Alexandria / Egypt
+          </p>
         </div>
       </div>
     </header>

@@ -74,11 +74,11 @@ export async function GithubContributions() {
   }
 
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <section className="grid grid-cols-1 gap-4 overflow-hidden md:grid-cols-4">
       <p>Recent Github Activity</p>
 
-      <div className="col-span-3 flex flex-col gap-3 justify-self-end">
-        <div className="flex gap-1">
+      <div className="col-span-3 flex w-full flex-col items-end gap-3 justify-self-end">
+        <div className="align-self-end flex gap-1">
           {data?.viewer?.contributionsCollection?.contributionCalendar?.weeks
             .slice(15)
             .map((week) => {
@@ -128,7 +128,7 @@ export async function GithubContributions() {
             })}
         </div>
 
-        <div className="flex justify-between gap-1">
+        <div className="flex w-full flex-col items-center justify-center gap-1 sm:flex-row sm:items-start sm:justify-between">
           <p className="text-muted-foreground text-sm">
             {
               data?.viewer.contributionsCollection.contributionCalendar
@@ -158,7 +158,7 @@ export function GithubContributionsSkeleton() {
   return (
     <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
       <p>Recent Github Activity</p>
-      <div className="col-span-3 flex flex-col gap-3 justify-self-end">
+      <div className="col-span-3 flex flex-col gap-3 justify-self-end overflow-hidden">
         <div className="flex gap-1">
           {Array.from({ length: 30 }).map((_, index) => (
             <div key={`week-${index}`} className="flex w-4 flex-col gap-1">
@@ -182,7 +182,7 @@ export function GithubContributionsSkeleton() {
           ))}
         </div>
 
-        <div className="flex justify-between gap-1">
+        <div className="flex flex-col justify-between gap-1 sm:flex-row">
           <p className="text-muted-foreground inline-flex items-center gap-1 text-sm">
             <Skeleton className="h-3 w-16" />
             contributions in the last year

@@ -17,7 +17,7 @@ import { Interests } from "./_components/interests";
 
 export default function HomePage() {
   return (
-    <div className="space-y-24">
+    <div className="space-y-16 md:space-y-24">
       <About />
 
       <TerminalContextProvider>

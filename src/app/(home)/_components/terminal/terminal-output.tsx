@@ -163,7 +163,7 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
         }
 
         return (
-          <p className="text-chart-3 dark:text-chart-5">
+          <p className="text-chart-3 dark:text-chart-2">
             Directory not found, did you mean{" "}
             <code className="bg-accent px-1 py-0.5">{closestDirectory}</code>
           </p>
@@ -195,10 +195,10 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
     case "flip": {
       const isHeads = Math.random() < 0.5;
       if (isHeads) {
-        return <p className="text-chart-2">Heads</p>;
+        return <p className="text-chart-1">Heads</p>;
       }
 
-      return <p className="text-chart-3">Tails</p>;
+      return <p className="text-chart-2">Tails</p>;
     }
 
     case "fastfetch": {

@@ -28,7 +28,7 @@ function ProjectCard({
 }: Project & ComponentProps<"div">) {
   return (
     <div className={cn(className, "flex flex-col gap-1")} {...props}>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
         <p>{title}</p>
         <div className="flex items-center">
           {links.github && (

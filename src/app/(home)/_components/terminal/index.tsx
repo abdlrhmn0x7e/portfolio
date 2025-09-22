@@ -87,6 +87,12 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
         e.currentTarget.innerText = "";
         updatePosition();
       }
+
+      if (e.key === "l" && e.ctrlKey) {
+        e.preventDefault();
+        setLastSubmittedCommand(null);
+        updatePosition();
+      }
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +101,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
 
   return (
     <div
-      className="bg-card h-[512px] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
+      className="bg-card h-[524px] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
       style={{ overflowAnchor: "none" }}
       onClick={() => ref.current?.focus()}
     >

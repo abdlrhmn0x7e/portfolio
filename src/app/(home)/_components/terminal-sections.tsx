@@ -5,7 +5,7 @@ export async function TerminalSections() {
   const blogs = await getBlogsMetadata();
 
   return (
-    <section>
+    <section id="terminal">
       <Terminal blogs={blogs} />
     </section>
   );
@@ -13,7 +13,7 @@ export async function TerminalSections() {
 
 export function TerminalSectionsSkeleton() {
   return (
-    <section>
+    <section id="terminal">
       <Terminal blogs={[]} />
     </section>
   );

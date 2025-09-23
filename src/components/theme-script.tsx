@@ -44,6 +44,7 @@ export function ThemeScript() {
       dangerouslySetInnerHTML={{
         __html: scriptContent,
       }}
+      defer
     />
   );
 }

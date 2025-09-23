@@ -1,7 +1,9 @@
 export async function About() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <p>About</p>
+    <section id="about" className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <a href="#about" className="size-fit">
+        About
+      </a>
       <p className="text-muted-foreground col-span-3 text-pretty">
         {`Passionate about creating meaningful software & exploring new
         technologies. It's been 3 years since I started my journey as a software engineer/full-stack developer

@@ -173,11 +173,8 @@
 
 html {
   @apply scroll-smooth;
-}
-
-html body[data-scroll-locked] {
-  overflow: visible !important;
-  margin-right: 0 !important;
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
 }
 
 [id] {
@@ -193,7 +190,7 @@ html body[data-scroll-locked] {
 
 .scroll-shadow:not([data-shadow="false"]) {
   --shadow-height: 20px;
-  --scrollbar-width: 8px;
+  --scrollbar-width: 4px;
   mask-image:
     linear-gradient(
       to bottom,
@@ -223,8 +220,8 @@ html body[data-scroll-locked] {
 }
 
 ::-webkit-scrollbar {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.25rem;
+  height: 0.25rem;
 }
 
 ::-webkit-scrollbar-thumb {

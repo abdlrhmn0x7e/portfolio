@@ -36,9 +36,11 @@ const EXPERIENCES = [
 
 export function Experience() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <section id="experience" className="grid grid-cols-1 gap-4 md:grid-cols-4">
       <div>
-        <p>Experience</p>
+        <a href="#experience" className="size-fit">
+          Experience
+        </a>
         <Button
           variant="link"
           size="sm"

@@ -101,7 +101,7 @@ export function Terminal({ blogs }: { blogs: Blog[] }) {
 
   return (
     <div
-      className="bg-card h-[524px] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
+      className="bg-background h-[524px] w-full space-y-2 overflow-y-auto overscroll-contain rounded-lg border pb-8"
       style={{ overflowAnchor: "none" }}
       onClick={() => ref.current?.focus()}
     >

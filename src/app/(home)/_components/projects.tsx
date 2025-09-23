@@ -5,10 +5,12 @@ import { PROJECTS } from "~/lib/constants";
 import type { Project } from "~/lib/types";
 import { cn } from "~/lib/utils";
 
-export function ProofOfWork() {
+export function Projects() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <p>Proof of Work</p>
+    <section id="projects" className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <a href="#projects" className="size-fit">
+        Projects
+      </a>
 
       <div className="col-span-3 flex flex-col gap-6">
         {PROJECTS.map((project, index) => (

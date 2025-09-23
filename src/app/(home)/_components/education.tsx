@@ -1,7 +1,9 @@
 export function Education() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <p>Education</p>
+    <section id="education" className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <a href="#education" className="size-fit">
+        Education
+      </a>
       <div className="col-span-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">

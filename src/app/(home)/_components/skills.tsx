@@ -20,8 +20,10 @@ const SKILLS = [
 
 export function Skills() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <p>Skills</p>
+    <section id="skills" className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <a href="#skills" className="size-fit">
+        Skills
+      </a>
       <div className="col-span-3 flex flex-wrap gap-2 text-pretty">
         {SKILLS.map((skill, index) => (
           <p key={skill} className="text-muted-foreground text-sm">

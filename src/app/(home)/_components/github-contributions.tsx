@@ -183,10 +183,10 @@ export function GithubContributionsSkeleton() {
         </div>
 
         <div className="flex flex-col justify-between gap-1 sm:flex-row">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-sm">
+          <div className="text-muted-foreground inline-flex items-center gap-1 text-sm">
             <Skeleton className="h-3 w-16" />
             contributions in the last year
-          </p>
+          </div>
           <div className="flex gap-1">
             <p className="text-muted-foreground text-sm">Less</p>
             {Array.from({ length: 5 }).map((_, index) => (

@@ -10,10 +10,11 @@ import {
   GithubContributions,
   GithubContributionsSkeleton,
 } from "./_components/github-contributions";
-import { ProofOfWork } from "./_components/proof-of-work";
+import { Projects } from "./_components/projects";
 import { Experience } from "./_components/experience";
 import { Education } from "./_components/education";
 import { Interests } from "./_components/interests";
+import { CTA } from "./_components/cta";
 
 export default function HomePage() {
   return (
@@ -34,11 +35,13 @@ export default function HomePage() {
         <GithubContributions />
       </Suspense>
 
-      <ProofOfWork />
+      <Projects />
 
       <Skills />
 
       <Interests />
+
+      <CTA />
     </div>
   );
 }

@@ -114,7 +114,7 @@ export function Header() {
             </div>
           </div>
 
-          <p className="text-muted-foreground text-xs sm:text-sm">
+          <p className="text-muted-foreground hidden text-xs sm:block sm:text-sm">
             Alexandria / Egypt
           </p>
         </div>

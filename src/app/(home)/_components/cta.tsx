@@ -1,35 +1,49 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, PlusIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 
 export function CTA() {
   return (
-    <section className="mb-24 pt-12">
-      <Card>
-        <CardHeader className="mx-auto w-full max-w-xl text-center">
-          <CardTitle className="text-2xl font-bold">
-            Have an idea? I can take it from “what if” to shipped.
-            <br />
-          </CardTitle>
-          <CardDescription>
-            (Hire me before I go back to tweaking my Arch rice.)
-          </CardDescription>
-        </CardHeader>
-        <CardFooter className="justify-center">
+    <section id="cta" className="mb-24 pt-12">
+      <div className="relative space-y-6 rounded-none border p-8">
+        <div className="mx-auto w-full max-w-xl space-y-2 text-center">
+          <h3 className="text-2xl font-bold text-pretty">
+            Have an idea?
+            <br />I can take it from “what if” to shipped.
+          </h3>
+          <p className="text-muted-foreground text-sm">
+            (hire me before I go back to tweaking my arch rice)
+          </p>
+        </div>
+
+        <div className="flex justify-center">
           <Button className="w-full max-w-xs" asChild>
             <a href="mailto:abdalrahman.vim@gmail.com">
               Contact me
               <ArrowUpRight />
             </a>
           </Button>
-        </CardFooter>
-      </Card>
+        </div>
+
+        <PlusIcon
+          className="stroke-border absolute -top-4 -left-4 stroke-1"
+          size={31}
+        />
+
+        <PlusIcon
+          className="stroke-border absolute -right-4 -bottom-10 stroke-1"
+          size={31}
+        />
+
+        <PlusIcon
+          className="stroke-border absolute -bottom-10 -left-4 stroke-1"
+          size={31}
+        />
+
+        <PlusIcon
+          className="stroke-border absolute -top-4 -right-4 stroke-1"
+          size={31}
+        />
+      </div>
     </section>
   );
 }

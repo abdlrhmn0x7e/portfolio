@@ -24,7 +24,7 @@ const EXPERIENCES = [
       name: "Sputnik Academy",
       link: "https://www.linkedin.com/company/sputnik-academy",
     },
-    date: "Aug 2025 - Present",
+    date: "Nov 2024 – July 2025",
     responsibilities: [
       "Led 4-person development team to build comprehensive learning platform, enabling Sputnik Academy to launch their first online course publishing and gamekit sales business",
       "Delivered admin dashboard that allowed staff to create and manage courses, lessons, and game kits",

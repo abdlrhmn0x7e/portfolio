@@ -74,8 +74,13 @@ export async function GithubContributions() {
   }
 
   return (
-    <section className="grid grid-cols-1 gap-4 overflow-hidden md:grid-cols-4">
-      <p>Recent Github Activity</p>
+    <section
+      id="github-contributions"
+      className="grid grid-cols-1 gap-4 overflow-hidden md:grid-cols-4"
+    >
+      <a href="#github-contributions" className="size-fit">
+        Recent Github Activity
+      </a>
 
       <div className="col-span-3 flex w-full flex-col items-end gap-3 justify-self-end">
         <div className="align-self-end flex gap-1">
@@ -156,8 +161,13 @@ export async function GithubContributions() {
 
 export function GithubContributionsSkeleton() {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <p>Recent Github Activity</p>
+    <section
+      id="github-contributions"
+      className="grid grid-cols-1 gap-4 md:grid-cols-4"
+    >
+      <a href="#github-contributions" className="size-fit">
+        Recent Github Activity
+      </a>
       <div className="col-span-3 flex flex-col gap-3 justify-self-end overflow-hidden">
         <div className="flex gap-1">
           {Array.from({ length: 30 }).map((_, index) => (

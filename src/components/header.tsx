@@ -1,13 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
-import { Caret } from "./caret";
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
-import { useLocalStorage } from "~/hooks/use-local-storage";
 import {
   IconBrandGithub,
   IconBrandLinkedin,
@@ -27,28 +24,13 @@ const NAV_LINKS = [
 
 export function Header() {
   const pathname = usePathname();
-  const [boringMode] = useLocalStorage("boring-mode", true);
 
   return (
     <header className="bg-background sticky top-0 z-50 flex items-center justify-between border-b py-3">
       <div className="flex w-full flex-col gap-1">
         <div className="flex w-full items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-4">
-            <Image
-              src="/images/purple-cat-running.gif"
-              alt="Purple cat running"
-              className={cn("w-12", boringMode && "hidden")}
-              width={0}
-              height={0}
-              sizes="100vw"
-              unoptimized
-            />
-            <div className="flex items-center gap-1">
-              <p className="text-lg font-semibold">abdlrhmn0x7e</p>
-              <Caret
-                className={cn("animate-caret-blink", boringMode && "hidden")}
-              />
-            </div>
+            <p className="text-lg font-semibold">abdlrhmn0x7e</p>
           </Link>
 
           <ModeToggle />

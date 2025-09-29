@@ -1,0 +1,332 @@
+---
+title: "BeamJS: The missing parts"
+description: "Private IoB & generative AI IoC enterprise full-stack web development framework Built on BackendJS, ExpressJS, AngularJS (or Any), and MongoDB (or Many) — designed for behavior-first, declarative, and modular enterprise systems."
+date: "2025-09-29"
+thumbnail: "/images/blogs/beamjs.png"
+readingTime: 10
+---
+
+## Contents
+
+## Introduction
+
+Before we dive in, I'd like to say that this is mostly a rant about my opinions on BeamJS
+and how it could be better. The idea is phenominal you define a behavior and BeamJS will
+gurantee a determinstic output. The main problem with it though is the implementation
+and the developer experience feel dated.
+in this blog I'll separate the signal from the noise: What BeamJS gets rights,
+where it breaks down and how could become how we write ai focused backends in the future.
+
+## What is BeamJS?
+
+It's a behavior pipeline runtime on top of ExpressJs that standardizes every backend operation into a determinstic flow:
+
+```
+catch → guard → authenticate → request (services) → query/insert/delete (data) → map (response)
+```
+
+It’s a set of conventions and adapters, not a full-stack framework. The heavy lifting (HTTP server, routing, session, etc.) comes from backend-js; BeamJS layers on a behavior DSL and cross‑DB abstraction.
+Now that we know what BeamJS is, let's talk about where it fails.
+
+## Developer experience
+
+BeamJS is hard to use and debug. Its custom DSL and lack of async/await make code awkward and hard to follow. Editors can’t help much, so refactoring and autocomplete are unreliable. The APIs are confusing, and it’s easy to use them the wrong way. There’s little built-in support for logging, tracing, or testing, so finding bugs and writing tests is difficult. Without templates or scaffolding, every developer solves the same problems differently, making the codebase messy over time.
+
+here's an example of the current beamjs implementation vs what I think it should look like
+in the future
+
+```javascript
+/*jslint node: true*/
+"use strict";
+
+module.exports.processOrder = behavior(
+  {
+    name: "processOrder",
+    inherits: FunctionalChainBehavior,
+    version: "1",
+    type: "integration_with_action",
+    path: "/orders/:orderId/process",
+    method: "POST",
+    parameters: {
+      orderId: { key: "orderId", type: "path" },
+    },
+    returns: {
+      success: { key: "success", type: "body" },
+      orderId: { key: "orderId", type: "body" },
+      status: { key: "status", type: "body" },
+    },
+  },
+  function (init) {
+    return function () {
+      var self = init.apply(this, arguments).self();
+      var { orderId } = self.parameters;
+
+      var error = null;
+      var stripeClient = null;
+      var paymentResult = null;
+      var order = null;
+
+      self
+        .catch(function (e) {
+          return error || e;
+        })
+        .next()
+        .guard(function () {
+          var id = parseInt(orderId);
+          if (!Number.isInteger(id)) {
+            error = new Error("Invalid orderId");
+            error.code = 400;
+            return false;
+          }
+          orderId = id;
+          return true;
+        })
+        .if(function () {
+          return !error;
+        })
+        .service(function () {
+          var StripeService_ENDPOINT = new StripePaymentService();
+          return new StripeService_ENDPOINT();
+        })
+        .authenticate([
+          new ServiceParameter({
+            key: "client",
+            value: stripeClient,
+            type: DATA,
+          }),
+          new ServiceParameter({
+            key: "apiKey",
+            value: process.env.STRIPE_SECRET_KEY,
+            type: DATA,
+          }),
+        ])
+        .then(function (clientId, er) {
+          if (er) {
+            error = er;
+            return;
+          }
+          stripeClient = clientId;
+        })
+        .next()
+        .if(function () {
+          return !error && stripeClient;
+        })
+        .service(function () {
+          var StripeService_ENDPOINT = new StripePaymentService();
+          return new StripeService_ENDPOINT();
+        })
+        .request(() => [
+          new ServiceParameter({
+            key: "client",
+            value: stripeClient,
+            type: DATA,
+          }),
+          new ServiceParameter({
+            key: "method",
+            value: "processPayment",
+            type: OPTION,
+          }),
+          new ServiceParameter({ key: "amount", value: 100, type: DATA }),
+          new ServiceParameter({ key: "currency", value: "usd", type: DATA }),
+        ])
+        .then(function (result, er) {
+          if (er) {
+            error = er;
+            return;
+          }
+          paymentResult = result;
+        })
+        .next()
+        .if(function () {
+          return !error && paymentResult;
+        })
+        .entity(new Order())
+        .insert(() => ({
+          _id: new Date().getTime(),
+          orderId: orderId,
+          status: paymentResult.status,
+        }))
+        .then(function (orders, e) {
+          if (e) {
+            error = e;
+            return;
+          }
+          if (Array.isArray(orders) && orders.length > 0) {
+            order = orders[0];
+          }
+        })
+        .next()
+        .async(function (next, models) {
+          if (!error && order) {
+            models([order]).save(function (e) {
+              if (e) {
+                error = e;
+              }
+              next();
+            });
+          } else {
+            next();
+          }
+        })
+        .map(function (response) {
+          response.success = !error && !!order;
+          response.orderId = order ? order._id : null;
+          response.status = paymentResult ? paymentResult.status : null;
+        })
+        .end();
+    };
+  },
+);
+```
+
+As you can see this was a lot of code just for one behavior. the chaining pattern is awesome
+don't get me wrong here but this much chaining? I'm not a fan of that. And I don't want to talk
+about the in editor experience for this is not good.
+
+instead I propose this way of writing:
+
+```typescript
+import { defineBehavior, z } from "@beamjs/next";
+
+export default defineBehavior({
+  name: "processOrder",
+  path: "/orders/:orderId/process",
+  method: "POST",
+  type: "integration_with_action",
+
+  queueBy: (p) => `user:${p.userId ?? "anon"}`,
+  events: (p, out) =>
+    out?.success ? [{ userId: p.userId, topic: "order_processed" }] : [],
+
+  // guard: typed, schema-validated inputs
+  params: z.object({
+    orderId: z.preprocess((v) => Number(v), z.number().int().positive()),
+    amount: z.number().positive().max(50_000).default(100),
+    currency: z.enum(["usd", "eur"]).default("usd"),
+    userId: z.number().int().optional(),
+    token: z.string().min(10), // header or middleware injected
+  }),
+
+  // shape of the response
+  returns: z.object({
+    success: z.boolean(),
+    orderId: z.number().nullable(),
+    status: z.string().nullable(),
+    transactionId: z.string().nullable(),
+  }),
+
+  // behavior body: async/await; the runtime maps this to catch→guard→authenticate→request→insert→map
+  async run(ctx) {
+    const { orderId, amount, currency } = ctx.params;
+
+    // authenticate (deterministic stage under the hood)
+    const client = await ctx.services.stripe.authenticate({
+      apiKey: ctx.secrets.STRIPE_SECRET_KEY,
+    });
+
+    // request external service (typed)
+    const payment = await ctx.services.stripe.request(client, {
+      method: "processPayment",
+      amount,
+      currency,
+    });
+
+    // db write (unified API; engine-specific impls behind the repo)
+    const now = Date.now();
+    const [order] = await ctx
+      .models(Order)
+      .insert({
+        _id: now,
+        orderId,
+        status: payment.status,
+        transactionId: payment.transactionId,
+      })
+      .save();
+
+    // optional event emission
+    ctx.emit(
+      { userId: ctx.params.userId },
+      {
+        type: "order_processed",
+        id: order?._id,
+        status: payment.status,
+        at: new Date(now).toISOString(),
+      },
+    );
+
+    // map (the runtime validates against `returns`)
+    return {
+      success: true,
+      orderId: order?._id ?? null,
+      status: payment.status ?? null,
+      transactionId: payment.transactionId ?? null,
+    };
+  },
+});
+```
+
+Why is this better you may ask?
+
+1. Readability: one async function replaces the custom chain DSL (self, .next(), manual flags), making flows linear and easy to follow.
+2. Types everywhere: parameters, returns, services, and models are strongly typed, enabling safe refactors and precise autocomplete.
+3. Schema-validated guard: inputs are validated up front using a battle tested library like Zod, Yap, Valibot or ArkType
+4. Deterministic pipeline preserved: the runtime still enforces catch → guard → authenticate → request → db → map, just without author boilerplate.
+5. Less boilerplate: no juggling of internal state, .then()/callbacks, or .if().next() chains; fewer places for subtle bugs.
+6. Testability: an in-memory runner with service/model stubs makes fast, deterministic unit tests trivial to write.
+7. Safer integrations: schema-constrained service responses and per-stage time/body limits reduce AI/external API risk.
+8. Explicit configuration: clear, validated options replace overloaded, surprising function signatures.
+9. Typed events/queueing: declaring event targets and queue keys in code with types prevents wiring mistakes.
+
+## BeamJS is outdated
+
+BeamJS feels outdated because it uses old Node.js patterns: CommonJS modules, var declarations, global flags, and synchronous code at import time. Modern projects use ESM, TypeScript, async logging, and avoid side effects on load.
+
+Writing behaviors in BeamJS is clunky—no async/await, just custom chains and callbacks, with little type safety. Configuring things is confusing and easy to misuse.
+
+Even the docs feel old, mentioning AngularJS and promising features that aren’t fully built or typed. Overall, BeamJS is ambitious but stuck in the past, with too much boilerplate and not enough modern features.
+
+When evaluating a modern TypeScript library, I expect several key qualities that go beyond just "it works":
+
+1. **First-class TypeScript support**: The library should be written in TypeScript, ship with type definitions, and leverage advanced type features (generics, conditional types, type inference) to provide a safe and ergonomic developer experience. Types should be accurate, expressive, and help prevent misuse.
+
+2. **ESM-first and tree-shakable**: The library should publish as native ES modules, support modern bundlers, and allow consumers to import only what they need. No legacy CommonJS-only builds.
+
+3. **Async/await everywhere**: All IO and extensibility points should be promise-based, never callback-based. Async flows should be natural and composable.
+
+4. **Zero or minimal runtime side effects**: Importing the library should not mutate globals, patch prototypes, or perform IO. All configuration should be explicit.
+
+5. **Declarative, composable APIs**: The API should encourage clear, declarative code—favoring configuration objects, builder patterns, or functional composition over imperative, stateful chains.
+
+6. **Schema validation and inference**: Input validation should be built-in or easy to add, with support for Zod, Yup, Valibot, or similar. Ideally, types are inferred from schemas, so runtime and compile-time validation stay in sync.
+
+7. **Modern ecosystem integration**: Support for ESM, TypeScript, modern Node.js, and compatibility with popular tools (Vite, Jest, Vitest, etc.), ORMS (Drizzle, Prisma, TypeORM, etc.) is a must.
+
+8. **No legacy baggage**: Avoids patterns like `var`, CommonJS, global state, or synchronous APIs. No reliance on deprecated or unmaintained dependencies.
+
+In short, a library should feel like a natural extension of the TypeScript/ESM ecosystem: safe, ergonomic, composable, and future-proof. Which I don't see in BeamJS
+
+### backend-js relies on ExpressJs, which hurts developer experience
+
+Express wasn’t built for TypeScript, so its types feel tacked on and awkward. You often end up using `any` or type assertions, especially when adding custom properties to `req` or `res`. Error handling is clunky with async/await, and many middleware packages have incomplete or outdated types, making type safety unreliable.
+
+Modern backends has schema validation and strong types out of the box—define your request and response once, and get validation, OpenAPI docs, and typed clients automatically. Express doesn’t do this; you have to add libraries like Zod yourself, and it’s still manual work. Plus, Express is based on old CommonJS patterns and isn’t as fast or ergonomic as newer frameworks like Fastify or Hono.
+
+By building `backend-js` on Express, all these issues become part of the foundation. It’s harder to get good TypeScript support, schema-driven routing, or typed plugins. If BeamJS wants a modern developer experience, it should use a runtime that puts types and schemas first—like NestJs, Fastify, Hono, Elysia, etc.. while keeping an Express adapter for compatibility. This way, you get better type safety, built-in validation, and a smoother path to typed clients and tools.
+
+## Scaffolding
+
+A CLI would make BeamJS much easier to use. With one command, you could set up a new project with TypeScript, environment files, scripts, and folders. Creating a new behavior would be just as simple, generating all the code, tests, and route setup you need. The CLI could also handle logging, tracing, hot reload, and even generate OpenAPI docs and client SDKs automatically. This would save time and ensure everyone uses the same patterns.
+
+## BeamJS Needs a Dedicated Website
+
+GitHub markdown is fine for storing reference text, but it isn’t a product surface. It assumes people already care enough to read long files and piece together the story themselves. Most potential users don’t. They need a fast, opinionated path from “What is this?” to “I ran it and it worked,” plus a reason to trust you. A dedicated site gives you that funnel.
+
+With a proper landing page, you control the narrative: a clear promise in one sentence, a 60‑second demo, a dead‑simple quickstart, and three concrete outcomes your framework delivers. You can show social proof, benchmarks, integrations, and a visible call‑to‑action that moves visitors to try it, star it, or join the community. None of that is natural in a README.
+
+Docs also work better on a site. You get fast search, versioning, and navigation designed for learning rather than browsing a repo tree. You can embed live code playgrounds, “try it” API consoles powered by OpenAPI, and runnable examples with mocked services—things that reduce time‑to‑first‑success to minutes. You can auto‑generate API reference from TypeScript and keep it in lockstep with releases. Analytics tell you which pages confuse people so you can fix them; announcements and changelogs keep users engaged.
+
+If BeamJS wants adoption, it needs a front page that explains the value in seconds and docs that teach by doing, not by scrolling.
+
+## Conclusion
+
+BeamJS points at something genuinely useful: a deterministic, behavior‑first way to build backends. But to matter, it shouldn’t try to be another general‑purpose framework. It should narrow in on where this model is a superpower—safe, auditable AI workflows; spec/BDD‑to‑code pipelines; and opinionated governance for regulated teams. Pair that focus with a TypeScript‑first, async authoring experience, a real CLI that scaffolds the “right” patterns, and a proper docs site that teaches by doing. Do that, and BeamJS stops competing with everything and starts owning a clear problem: turning messy integrations and AI calls into predictable, reviewable, production‑ready flows. That’s a future worth shipping.

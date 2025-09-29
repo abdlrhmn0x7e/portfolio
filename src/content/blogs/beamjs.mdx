@@ -15,7 +15,7 @@ and how it could be better. The idea is phenominal you define a behavior and Bea
 gurantee a determinstic output. The main problem with it though is the implementation
 and the developer experience feel dated.
 in this blog I'll separate the signal from the noise: What BeamJS gets rights,
-where it breaks down and how could become how we write ai focused backends in the future.
+where it breaks down and how could it become how we write ai focused backends in the future.
 
 ## What is BeamJS?
 
@@ -30,7 +30,7 @@ Now that we know what BeamJS is, let's talk about where it fails.
 
 ## Developer experience
 
-BeamJS is hard to use and debug. Its custom DSL and lack of async/await make code awkward and hard to follow. Editors can’t help much, so refactoring and autocomplete are unreliable. The APIs are confusing, and it’s easy to use them the wrong way. There’s little built-in support for logging, tracing, or testing, so finding bugs and writing tests is difficult. Without templates or scaffolding, every developer solves the same problems differently, making the codebase messy over time.
+BeamJS is hard to use and debug. Its custom DSL and lack of async/await makes code awkward and hard to follow. Editors can’t help much, so refactoring and autocomplete are unreliable. The APIs are confusing, and it’s easy to use them the wrong way. There’s little built-in support for logging, tracing, or testing, so finding bugs and writing tests is difficult. Without templates or scaffolding, every developer solves the same problems differently, making the codebase messy over time.
 
 here's an example of the current beamjs implementation vs what I think it should look like
 in the future
@@ -267,15 +267,23 @@ export default defineBehavior({
 
 Why is this better you may ask?
 
-1. Readability: one async function replaces the custom chain DSL (self, .next(), manual flags), making flows linear and easy to follow.
-2. Types everywhere: parameters, returns, services, and models are strongly typed, enabling safe refactors and precise autocomplete.
-3. Schema-validated guard: inputs are validated up front using a battle tested library like Zod, Yap, Valibot or ArkType
-4. Deterministic pipeline preserved: the runtime still enforces catch → guard → authenticate → request → db → map, just without author boilerplate.
-5. Less boilerplate: no juggling of internal state, .then()/callbacks, or .if().next() chains; fewer places for subtle bugs.
-6. Testability: an in-memory runner with service/model stubs makes fast, deterministic unit tests trivial to write.
-7. Safer integrations: schema-constrained service responses and per-stage time/body limits reduce AI/external API risk.
-8. Explicit configuration: clear, validated options replace overloaded, surprising function signatures.
-9. Typed events/queueing: declaring event targets and queue keys in code with types prevents wiring mistakes.
+1. **Readability**: one async function replaces the custom chain DSL (self, .next(), manual flags), making flows linear and easy to follow.
+
+2. **Types everywhere**: parameters, returns, services, and models are strongly typed, enabling safe refactors and precise autocomplete.
+
+3. **Schema-validated guard**: inputs are validated up front using a battle tested library like Zod, Yap, Valibot or ArkType
+
+4. **Deterministic pipeline preserved**: the runtime still enforces catch → guard → authenticate → request → db → map, just without author boilerplate.
+
+5. **Less boilerplate**: no juggling of internal state, .then()/callbacks, or .if().next() chains; fewer places for subtle bugs.
+
+6. **Testability**: an in-memory runner with service/model stubs makes fast, deterministic unit tests trivial to write.
+
+7. **Safer integrations**: schema-constrained service responses and per-stage time/body limits reduce AI/external API risk.
+
+8. **Explicit configuration**: clear, validated options replace overloaded, surprising function signatures.
+
+9. **Typed events/queueing**: declaring event targets and queue keys in code with types prevents wiring mistakes.
 
 ## BeamJS is outdated
 
@@ -309,7 +317,7 @@ In short, a library should feel like a natural extension of the TypeScript/ESM e
 
 Express wasn’t built for TypeScript, so its types feel tacked on and awkward. You often end up using `any` or type assertions, especially when adding custom properties to `req` or `res`. Error handling is clunky with async/await, and many middleware packages have incomplete or outdated types, making type safety unreliable.
 
-Modern backends has schema validation and strong types out of the box—define your request and response once, and get validation, OpenAPI docs, and typed clients automatically. Express doesn’t do this; you have to add libraries like Zod yourself, and it’s still manual work. Plus, Express is based on old CommonJS patterns and isn’t as fast or ergonomic as newer frameworks like Fastify or Hono.
+Modern backends have schema validation and strong types out of the box—define your request and response once, and get validation, OpenAPI docs, and typed clients automatically. Express doesn’t do this; you have to add libraries like Zod yourself, and it’s still manual work. Plus, Express is based on old CommonJS patterns and isn’t as fast or ergonomic as newer frameworks like Fastify or Hono.
 
 By building `backend-js` on Express, all these issues become part of the foundation. It’s harder to get good TypeScript support, schema-driven routing, or typed plugins. If BeamJS wants a modern developer experience, it should use a runtime that puts types and schemas first—like NestJs, Fastify, Hono, Elysia, etc.. while keeping an Express adapter for compatibility. This way, you get better type safety, built-in validation, and a smoother path to typed clients and tools.
 
@@ -323,10 +331,10 @@ GitHub markdown is fine for storing reference text, but it isn’t a product sur
 
 With a proper landing page, you control the narrative: a clear promise in one sentence, a 60‑second demo, a dead‑simple quickstart, and three concrete outcomes your framework delivers. You can show social proof, benchmarks, integrations, and a visible call‑to‑action that moves visitors to try it, star it, or join the community. None of that is natural in a README.
 
-Docs also work better on a site. You get fast search, versioning, and navigation designed for learning rather than browsing a repo tree. You can embed live code playgrounds, “try it” API consoles powered by OpenAPI, and runnable examples with mocked services—things that reduce time‑to‑first‑success to minutes. You can auto‑generate API reference from TypeScript and keep it in lockstep with releases. Analytics tell you which pages confuse people so you can fix them; announcements and changelogs keep users engaged.
+Docs also work better on a site. You get fast search, versioning, and navigation designed for learning rather than browsing a repo tree. You can embed live code playgrounds, “try it” API consoles powered by OpenAPI, and runnable examples with mocked services—things that reduce time‑to‑first‑success to minutes. Analytics tell you which pages confuse people so you can fix them; announcements and changelogs keep users engaged.
 
 If BeamJS wants adoption, it needs a front page that explains the value in seconds and docs that teach by doing, not by scrolling.
 
 ## Conclusion
 
-BeamJS points at something genuinely useful: a deterministic, behavior‑first way to build backends. But to matter, it shouldn’t try to be another general‑purpose framework. It should narrow in on where this model is a superpower—safe, auditable AI workflows; spec/BDD‑to‑code pipelines; and opinionated governance for regulated teams. Pair that focus with a TypeScript‑first, async authoring experience, a real CLI that scaffolds the “right” patterns, and a proper docs site that teaches by doing. Do that, and BeamJS stops competing with everything and starts owning a clear problem: turning messy integrations and AI calls into predictable, reviewable, production‑ready flows. That’s a future worth shipping.
+BeamJS points at something genuinely useful: a deterministic, behavior‑first way to build backends. But to matter, it shouldn’t try to be another general‑purpose framework. It should narrow in on where this model is a superpower—safe, auditable AI workflows; and opinionated governance for regulated teams. Pair that focus with a TypeScript‑first, async authoring experience, a real CLI that scaffolds the “right” patterns, and a proper docs site that teaches by doing. Do that, and BeamJS stops competing with everything and starts owning a clear problem: turning messy integrations and AI calls into predictable, reviewable, production‑ready flows. That’s a future worth shipping.

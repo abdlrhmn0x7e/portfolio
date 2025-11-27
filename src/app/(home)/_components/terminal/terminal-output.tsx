@@ -144,6 +144,14 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
       );
     }
 
+    case "pwd": {
+      return (
+        <p className="text-chart-3 dark:text-chart-5">
+          /home/abdlrhmn0x7e/{currentCwd === "~" ? "" : currentCwd}
+        </p>
+      );
+    }
+
     case "cd": {
       if (
         args[0] &&
@@ -230,8 +238,10 @@ function CommandOutput({ blogs }: { blogs: Blog[] }) {
           {TERMINAL_COMMANDS.map((c) => (
             <li key={c.command}>
               <span className="text-chart-1 dark:text-chart-4 mr-2">-</span>
-              <code className="bg-accent px-1 py-0.5">{c.command}</code> -{" "}
-              {c.description}
+              <code className="bg-muted text-foreground px-1 py-0.5">
+                {c.command}
+              </code>{" "}
+              - {c.description}
             </li>
           ))}
         </ul>

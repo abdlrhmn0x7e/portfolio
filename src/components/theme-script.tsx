@@ -1,6 +1,6 @@
 "use client";
 
-import { boringTheme, kanagawaTheme } from "~/config/themes";
+import { boringTheme, rosePineTheme } from "~/config/themes";
 
 export function ThemeScript() {
   const scriptContent = `
@@ -21,7 +21,7 @@ export function ThemeScript() {
 			}
 
 			const boringTheme = ${JSON.stringify(boringTheme)};
-			const kanagawaTheme = ${JSON.stringify(kanagawaTheme)};
+			const rosepineTheme = ${JSON.stringify(rosePineTheme)};
 
 			if (!Array.from(["light", "dark"]).includes(themeMode)) {
 				return;
@@ -29,7 +29,7 @@ export function ThemeScript() {
 
 			const theme = boringMode
 				? boringTheme[themeMode ?? "dark"]
-				: kanagawaTheme[themeMode ?? "dark"];
+				: rosepineTheme[themeMode ?? "dark"];
 
 			const variables = Object.entries(theme).map(([key, value]) => {
 				return \`--\${key}: \${value};\`;
@@ -44,7 +44,6 @@ export function ThemeScript() {
       dangerouslySetInnerHTML={{
         __html: scriptContent,
       }}
-      defer
     />
   );
 }

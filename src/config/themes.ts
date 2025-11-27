@@ -1,3 +1,150 @@
+export const lightRosePineThemeStyles = {
+  background: "#faf4ed",
+  foreground: "#575279",
+  card: "#fffaf3",
+  "card-foreground": "#575279",
+  popover: "#f2e9e1",
+  "popover-foreground": "#575279",
+
+  primary: "#286983",
+  "primary-foreground": "#faf4ed",
+
+  secondary: "#907aa9",
+  "secondary-foreground": "#faf4ed",
+
+  muted: "#f4ede8",
+  "muted-foreground": "#9893a5",
+
+  accent: "#ea9d34",
+  "accent-foreground": "#faf4ed",
+
+  destructive: "#b4637a",
+  "destructive-foreground": "#faf4ed",
+
+  border: "#dfdad9",
+  input: "#dfdad9",
+  ring: "#56949f",
+
+  "chart-1": "#286983",
+  "chart-2": "#56949f",
+  "chart-3": "#907aa9",
+  "chart-4": "#ea9d34",
+  "chart-5": "#d7827e",
+
+  sidebar: "#f2e9e1",
+  "sidebar-foreground": "#575279",
+  "sidebar-primary": "#286983",
+  "sidebar-primary-foreground": "#faf4ed",
+  "sidebar-accent": "#907aa9",
+  "sidebar-accent-foreground": "#575279",
+  "sidebar-border": "#cecacd",
+  "sidebar-ring": "#56949f",
+
+  "font-sans": "Geist Mono, monospace",
+  "font-serif": "Geist Mono, monospace",
+  "font-mono": "Geist Mono, monospace",
+  radius: "0rem",
+
+  "shadow-2xs": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+  "shadow-xs": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+  "shadow-sm":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 1px 2px -1px hsl(0 0% 0% / 0)",
+  shadow: "0 1px 3px 0px hsl(0 0% 0% / 0), 0 1px 2px -1px hsl(0 0% 0% / 0)",
+  "shadow-md":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 2px 4px -1px hsl(0 0% 0% / 0)",
+  "shadow-lg":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 4px 6px -1px hsl(0 0% 0% / 0)",
+  "shadow-xl":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 8px 10px -1px hsl(0 0% 0% / 0)",
+  "shadow-2xl": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+
+  "tracking-normal": "0em",
+  spacing: "0.25rem",
+
+  // Pine-based heat scale (light)
+  "heat-0": "#e5f1f5",
+  "heat-1": "#b5d3df",
+  "heat-2": "#86b6c9",
+  "heat-3": "#5899b3",
+  "heat-4": "#286983",
+};
+
+// Rose Pine -- Dark
+export const darkRosePineThemeStyles = {
+  background: "#191724",
+  foreground: "#e0def4",
+  card: "#1f1d2e",
+  "card-foreground": "#e0def4",
+  popover: "#26233a",
+  "popover-foreground": "#e0def4",
+
+  primary: "#31748f",
+  "primary-foreground": "#191724",
+
+  secondary: "#c4a7e7",
+  "secondary-foreground": "#191724",
+
+  muted: "#21202e",
+  "muted-foreground": "#6e6a86",
+
+  accent: "#f6c177",
+  "accent-foreground": "#191724",
+
+  destructive: "#eb6f92",
+  "destructive-foreground": "#191724",
+
+  border: "#403d52",
+  input: "#403d52",
+  ring: "#31748f",
+
+  "chart-1": "#31748f",
+  "chart-2": "#eb6f92",
+  "chart-3": "#f6c177",
+  "chart-4": "#c4a7e7",
+  "chart-5": "#ebbcba",
+
+  sidebar: "#1f1d2e",
+  "sidebar-foreground": "#e0def4",
+  "sidebar-primary": "#31748f",
+  "sidebar-primary-foreground": "#191724",
+  "sidebar-accent": "#c4a7e7",
+  "sidebar-accent-foreground": "#e0def4",
+  "sidebar-border": "#403d52",
+  "sidebar-ring": "#9ccfd8",
+
+  "font-sans": "Geist Mono, monospace",
+  "font-serif": "Geist Mono, monospace",
+  "font-mono": "Geist Mono, monospace",
+  radius: "0rem",
+
+  "shadow-2xs": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+  "shadow-xs": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+  "shadow-sm":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 1px 2px -1px hsl(0 0% 0% / 0)",
+  shadow: "0 1px 3px 0px hsl(0 0% 0% / 0), 0 1px 2px -1px hsl(0 0% 0% / 0)",
+  "shadow-md":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 2px 4px -1px hsl(0 0% 0% / 0)",
+  "shadow-lg":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 4px 6px -1px hsl(0 0% 0% / 0)",
+  "shadow-xl":
+    "0 1px 3px 0px hsl(0 0% 0% / 0), 0 8px 10px -1px hsl(0 0% 0% / 0)",
+  "shadow-2xl": "0 1px 3px 0px hsl(0 0% 0% / 0)",
+
+  "tracking-normal": "0em",
+  spacing: "0.25rem",
+
+  // Pine-based heat scale (dark)
+  "heat-0": "#0f1d25",
+  "heat-1": "#1e3a45",
+  "heat-2": "#2c5765",
+  "heat-3": "#3a7485",
+  "heat-4": "#4a92a7",
+};
+
+export const rosePineTheme = {
+  light: lightRosePineThemeStyles,
+  dark: darkRosePineThemeStyles,
+};
 // Kanagawa light theme styles
 const lightKanagawaThemeStyles = {
   background: "oklch(0.9824 0.0251 99.518)",

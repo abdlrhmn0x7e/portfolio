@@ -1,4 +1,4 @@
-import { boringTheme, kanagawaTheme } from "~/config/themes";
+import { boringTheme, rosePineTheme } from "~/config/themes";
 import { type ThemeMode } from "./types";
 
 export function changeThemeVariables(
@@ -7,7 +7,7 @@ export function changeThemeVariables(
 ) {
   const theme = isBoringMode
     ? boringTheme[themeMode]
-    : kanagawaTheme[themeMode];
+    : rosePineTheme[themeMode];
 
   const variables = Object.entries(theme).map(([key, value]) => {
     return `--${key}: ${value};`;

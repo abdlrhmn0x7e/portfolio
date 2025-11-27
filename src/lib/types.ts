@@ -7,6 +7,16 @@ export interface TerminalCommand {
   output: () => ReactNode;
 }
 
+export type ProjectTag =
+  | "nextjs"
+  | "react"
+  | "typescript"
+  | "tailwind"
+  | "postgresql"
+  | "stripe"
+  | "aws"
+  | "prisma";
+
 export interface Project {
   title: string;
   description: string;
@@ -14,6 +24,8 @@ export interface Project {
     github?: string;
     preview?: string;
   };
+  tags?: ProjectTag[];
+  previewImage?: string;
 }
 
 export type Command = (typeof TERMINAL_COMMANDS)[number]["command"];

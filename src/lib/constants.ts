@@ -1,5 +1,8 @@
 import type { Project } from "./types";
 
+const PROJECT_PLACEHOLDER =
+  "https://placehold.co/640x360/png?text=Project+Preview";
+
 export const ASCII_ART = `
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⡿⠿⢿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠉⠉⠉⠙⠻⣅⠀⠈⢧⠀⠈⠛⠉⠉⢻⣿⣿
@@ -74,44 +77,57 @@ export const NEOFETCH_INFO = `
 
 export const PROJECTS: Project[] = [
   {
+    title: "Gear Verse",
+    description:
+      "Full-stack commerce platform with Next.js, Drizzle, and PostgreSQL powering real-time inventory plus a self-serve admin dashboard.",
+    links: {
+      github: "https://github.com/abdlrhmn0x7e/gear-verse",
+      preview: "https://gear-verse.vercel.app",
+    },
+    tags: ["nextjs", "react", "typescript", "postgresql", "aws"],
+    previewImage: "/images/projects/gear-verse.webp",
+  },
+  {
     title: "Shafei",
-    description: `A comprehensive full-stack vehicle management application 
-									designed to streamline car registration, service tracking, 
-									and administrative operations. Built with modern technologies 
-									in a scalable monorepo architecture.`,
+    description:
+      "Vehicle management suite that tracks registrations, services, and back-office ops inside a scalable monorepo.",
     links: {
       preview: "https://shafei.vercel.app",
     },
+    tags: ["nextjs", "typescript", "postgresql"],
+    previewImage: "/images/projects/shafei.webp",
   },
   {
     title: "Sputnik",
-    description: `A comprehensive online learning platform for course management 
-		and student progress tracking built with React, TypeScript, Hono, Prisma, and PostgreSQL.
-		 Architected and developed the complete full-stack learning management system featuring 
-		 video streaming, quizzes, progress tracking, and payment integration.
-		`,
+    description:
+      "Learning platform with streaming, quizzes, and payments built on React, Hono, Prisma, and PostgreSQL.",
     links: {
       github: "https://github.com/abdlrhmn0x7e/sputnik",
     },
+    tags: ["react", "typescript", "prisma", "postgresql"],
+    previewImage: "/images/projects/sputnik.webp",
   },
   {
     title: "Casecobra",
-    description: `A modern e-commerce platform for custom phone cases, 
-		built with cutting-edge web technologies. Create, customize, and 
-		buy phone cases. built with Next.js, Tailwind, and PostgreSQL. featuring
-		stripe payment integration, product management, and a responsive design.`,
+    description:
+      "Custom phone case storefront powered by Next.js, Tailwind, PostgreSQL, and Stripe checkout.",
     links: {
       github: "https://github.com/abdlrhmn0x7e/casecobra",
       preview: "https://casecobra-lake-iota.vercel.app",
     },
+    tags: ["nextjs", "tailwind", "postgresql", "stripe"],
+    previewImage: "/images/projects/case-cobra.webp",
   },
   {
     title: "PingPanda",
-    description: `A modern SAAS landing page for real time discord notifications, built with Next.js, Tailwind, and PostgreSQL.`,
+    description:
+      "SaaS landing for real-time Discord alerts built with Next.js, Tailwind, and PostgreSQL.",
     links: {
       github: "https://github.com/abdlrhmn0x7e/pingpanda",
       preview: "https://ping-panda-beta-one.vercel.app",
     },
+    tags: ["nextjs", "tailwind", "react"],
+    previewImage: "/images/projects/ping-panda.webp",
   },
 ];
 
@@ -119,6 +135,10 @@ export const TERMINAL_COMMANDS = [
   {
     command: "cd <directory>",
     description: "Navigate to a directory",
+  },
+  {
+    command: "pwd",
+    description: "Print the current working directory",
   },
   {
     command: "ls",
